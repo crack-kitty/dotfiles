@@ -1,0 +1,51 @@
+# =============================================================================
+# Claude Code
+# =============================================================================
+# Stale directory (renamed to claude/)
+.claude/
+
+# Sensitive data
+claude/.credentials.json
+claude/*.key
+claude/*.pem
+claude/*.env
+claude/*secret*
+claude/*password*
+claude/.mcp.json
+claude/settings.local.json
+
+# Session and state data
+claude/CHECKPOINT
+claude/.checkpoints/
+claude/.session/
+claude/.update.lock
+claude/history.jsonl
+claude/stats-cache.json
+
+# Working directories
+claude/cache/
+claude/debug/
+claude/downloads/
+claude/file-history/
+claude/ide/
+claude/image-cache/
+claude/paste-cache/
+claude/plans/
+claude/projects/
+claude/session-env/
+claude/shell-snapshots/
+claude/tasks/
+claude/tmp/
+claude/todos/
+
+# Logs (keep yt/.gitkeep)
+claude/logs/*
+!claude/logs/yt/.gitkeep
+
+# Plugins and telemetry
+claude/plugins/
+claude/statsig/
+claude/telemetry/
+
+# Specstory
+claude/.specstory/

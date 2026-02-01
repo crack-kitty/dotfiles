@@ -10,3 +10,7 @@
     ~/.gitconfig: .gitconfig
     ~/.bashrc: .bashrc
     ~/.profile: .profile
+
+# Claude Code config
+- link:
+    ~/.claude: claude
