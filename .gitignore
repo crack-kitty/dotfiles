@@ -38,9 +38,10 @@ claude/tasks/
 claude/tmp/
 claude/todos/
 
-# Logs (keep yt/.gitkeep)
+# Logs (keep yt/.gitkeep and damage-control/.gitkeep)
 claude/logs/*
 !claude/logs/yt/.gitkeep
+!claude/logs/damage-control/.gitkeep
 
 # Plugins and telemetry
 claude/plugins/
@@ -49,3 +50,7 @@ claude/telemetry/
 
 # Specstory
 claude/.specstory/
+
+# Python cache
+claude/**/__pycache__/
+claude/**/*.pyc
