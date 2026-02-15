@@ -1,5 +1,10 @@
 #!/bin/bash
-python3 -c "
+
+# Find Python (python3 on Linux/Mac, python on Windows)
+PY=$(command -v python3 2>/dev/null || command -v python 2>/dev/null)
+[ -z "$PY" ] && { echo "Claude"; exit 0; }
+
+$PY -c "
 import sys, json
 try:
     data = json.load(sys.stdin)
@@ -13,12 +18,12 @@ try:
     used_int = int(round(used))
     rem_int = int(round(remaining))
     if used_int >= 90:
-        c = '[31m'
+        c = '\033[31m'
     elif used_int >= 70:
-        c = '[33m'
+        c = '\033[33m'
     else:
-        c = '[32m'
-    r = '[0m'
+        c = '\033[32m'
+    r = '\033[0m'
     s = f'{c}{model}{r} | Context: {c}{used_int}%{r}'
     if rem_int <= 5:
         s += f' {c}[CRITICAL: {rem_int}% remaining!]{r}'
