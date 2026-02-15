@@ -39,5 +39,9 @@
       }
     ]
   },
-  "model": "opus"
+  "model": "opus",
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true
+  },
+  "skipDangerousModePermissionPrompt": true
 }
