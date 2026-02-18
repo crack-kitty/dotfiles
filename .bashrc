@@ -121,3 +121,4 @@ alias l='ls --color -lhav --group-directories-first'
 alias dps='docker ps --format="table {{.Names}}\t{{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.State}}\t{{.Status}}"'
 alias dpsp='docker ps --format="table {{.Names}}\t{{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.State}}\t{{.Status}}\t{{.Ports}}"'
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/flutter/bin:$PATH"
