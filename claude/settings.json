@@ -46,6 +46,6 @@
   "skipDangerousModePermissionPrompt": true,
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
+    "command": "~/.claude/statusline-command.sh"
   }
 }
