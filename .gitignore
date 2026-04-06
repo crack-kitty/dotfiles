@@ -18,6 +18,9 @@ claude/settings.local.json
 claude/.memhash/
 
 # Session and state data
+claude/backups/
+claude/mcp-needs-auth-cache.json
+claude/sessions/
 claude/CHECKPOINT
 claude/.checkpoints/
 claude/.session/
