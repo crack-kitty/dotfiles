@@ -27,6 +27,9 @@ claude/.session/
 claude/.update.lock
 claude/history.jsonl
 claude/stats-cache.json
+claude/mcp-needs-auth-cache.json
+claude/backups/
+claude/sessions/
 
 # Working directories
 claude/cache/
