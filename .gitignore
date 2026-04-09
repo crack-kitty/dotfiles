@@ -27,6 +27,7 @@ claude/.session/
 claude/.update.lock
 claude/history.jsonl
 claude/stats-cache.json
+claude/*.code-workspace
 
 # Working directories
 claude/cache/
