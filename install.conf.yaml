@@ -11,6 +11,10 @@
     ~/.bashrc: .bashrc
     ~/.profile: .profile
 
-# Claude Code config
+# Claude Code config - remove real dir if it exists so dotbot can symlink it
+- shell:
+    - command: '[ -d ~/.claude ] && [ ! -L ~/.claude ] && rm -rf ~/.claude || true'
+      description: Clear ~/.claude if it is a real directory (not a symlink)
+
 - link:
     ~/.claude: claude
