@@ -26,6 +26,7 @@ claude/.checkpoints/
 claude/.session/
 claude/.update.lock
 claude/history.jsonl
+claude/history/
 claude/stats-cache.json
 claude/*.code-workspace
 
