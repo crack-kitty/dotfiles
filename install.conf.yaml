@@ -18,3 +18,10 @@
 
 - link:
     ~/.claude: claude
+
+# Codex CLI for the codex@openai-codex Claude Code plugin
+- shell:
+    - command: npm config set prefix "$HOME/.local" >/dev/null 2>&1 && (command -v codex >/dev/null 2>&1 || npm install -g @openai/codex)
+      description: Install Codex CLI (user-prefix npm) if missing
+      stdout: true
+      stderr: true
