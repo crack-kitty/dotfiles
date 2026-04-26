@@ -25,3 +25,10 @@
       description: Install Codex CLI (user-prefix npm) if missing
       stdout: true
       stderr: true
+
+# Sync Claude Code plugins from settings.json (idempotent)
+- shell:
+    - command: bash scripts/install-claude-plugins.sh
+      description: Install Claude Code plugins listed in claude/settings.json
+      stdout: true
+      stderr: true
