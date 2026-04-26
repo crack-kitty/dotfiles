@@ -151,6 +151,20 @@ See `~/.claude/skills/*/SKILL.md` for details.
 
 ---
 
+## Claude Connector (Shared MCP Memory)
+
+The Claude Connector MCP server is always running at **`https://claude-connector.ckcompute.xyz/mcp`**.
+Config is in `~/.claude.json` (HTTP MCP server with Bearer token).
+
+When asked to "save to the connector" or "save context and to the connector":
+1. Use `mcp__claude-connector__save_context` with the relevant project name
+2. Use `mcp__claude-connector__log_session` to record the session summary
+
+Do NOT silently skip connector saves if the tool errors — report the failure so it can be investigated.
+The `/health` endpoint being reachable does not guarantee the MCP tool can connect (it uses SSE).
+
+---
+
 ## Session History Capture
 
 Record significant session activities to `~/.claude/history/{project}.jsonl` at END of response.
