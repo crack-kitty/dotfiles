@@ -1,44 +1,6 @@
 {
   "includeCoAuthoredBy": false,
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'source ~/.claude/.secrets 2>/dev/null; python3 /home/dave/appdev/mcp/claudememkeep/hooks/session-start.py'",
-            "timeout": 10,
-            "statusMessage": "Loading shared context..."
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'source ~/.claude/.secrets 2>/dev/null; python3 /home/dave/appdev/mcp/claudememkeep/hooks/session-end.py'",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'source ~/.claude/.secrets 2>/dev/null; python3 /home/dave/appdev/mcp/claudememkeep/hooks/pre-compact.py'",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline-command.sh"
