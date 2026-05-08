@@ -16,6 +16,7 @@ claude/settings.local.json
 
 # Machine-specific state
 claude/.memhash/
+claude/.last-cleanup
 
 # Session and state data
 claude/backups/
