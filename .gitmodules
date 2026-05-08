@@ -2,3 +2,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
+[submodule "claude/skills-vendor/n8n-skills"]
+	path = claude/skills-vendor/n8n-skills
+	url = https://github.com/czlonkowski/n8n-skills.git

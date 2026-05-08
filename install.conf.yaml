@@ -11,6 +11,11 @@
     ~/.bashrc: .bashrc
     ~/.profile: .profile
 
+# Vendor skills (submodules) — init before symlinks resolve
+- shell:
+    - command: git -C ~/.dotfiles submodule update --init --recursive
+      description: Initialize git submodules (vendor skills, etc.)
+
 # Claude Code config - remove real dir if it exists so dotbot can symlink it
 - shell:
     - command: '[ -d ~/.claude ] && [ ! -L ~/.claude ] && rm -rf ~/.claude || true'
