@@ -187,6 +187,30 @@ Record significant session activities to `~/.claude/history/{project}.jsonl` at 
 
 ---
 
+## Session End — Mandatory
+
+### OpenBrain Auto-Save (MANDATORY)
+At the end of EVERY session, before signing off:
+
+1. **Save session summary** — Call `capture` on OpenBrain MCP with:
+   - kind: "fact"
+   - headline: brief summary of what was done
+   - body: decisions made, what changed, next steps
+   - project: the relevant project name
+   - source: "claude-code"
+   - tags: relevant tags
+
+2. **Update project board** — If any project's status, next steps, or scope changed:
+   - Search OpenBrain: project=project-board, query="project board [category name]"
+   - Recall the matching fact to get current JSON
+   - Update the JSON: change status, remove completed next items, add new ones, update summary
+   - Write back via OpenBrain:update
+   - The 8 board categories: StockMaster, FlightCheck, TheSlowDollar, Software Products, Homelab (parts 1+2), Work (TEL), Personal
+
+3. **Never skip this.** Dave does not update the board. You do.
+
+---
+
 ## Changelog
 
 When modifying `~/.claude/CLAUDE.md`, skills, or commands, append an entry to `~/.claude/CHANGELOG.md`:
