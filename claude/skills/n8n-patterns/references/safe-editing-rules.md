@@ -8,18 +8,18 @@ This is the foundation of everything below. When in doubt, return to it.
 
 ## The 13 Hard Rules
 
-1. **Never rewrite an entire workflow unless explicitly requested.** If Dave asks to "fix the Normalize News node," do not regenerate the whole workflow JSON. Patch the targeted node and adjacent connections only.
+1. **Never rewrite an entire workflow unless explicitly requested.** If the user asks to "fix the Normalize News node," do not regenerate the whole workflow JSON. Patch the targeted node and adjacent connections only.
 2. **Prefer JSON Patch (RFC 6902) reasoning** when describing changes — `add`/`remove`/`replace` operations on specific paths, not "here's the new file."
 3. **Preserve node IDs** unless explicitly creating a new node. Node IDs are referenced internally by n8n.
 4. **Preserve node names** unless renaming is explicitly requested. Renaming a node breaks every downstream `$node["Old Name"]` and `$('Old Name')` reference.
 5. **Preserve credential references** (the `credentials` block on a node). Never modify these without explicit permission.
-6. **Never invent credential values.** If a workflow references a credential Dave hasn't provided, ask — don't guess names or fabricate IDs.
+6. **Never invent credential values.** If a workflow references a credential the user hasn't provided, ask — don't guess names or fabricate IDs.
 7. **Preserve existing connections** unless the request requires changing them. If you need to add a node, splice it in carefully.
 8. **Do not change unrelated nodes.** If asked to edit Node A, don't "while we're at it" tidy up Node B.
 9. **Do not delete nodes unless explicitly requested.** Even disabled or unused-looking nodes might be intentional.
 10. **Do not modify production workflow files in place** when reasoning locally. Always treat the input as immutable; produce an `.edited.json` or proposed-patch instead.
 11. **Always create an edited copy** for review.
-12. **Always produce a patch description and a diff** so Dave can review before importing.
+12. **Always produce a patch description and a diff** so the user can review before importing.
 13. **Always validate JSON after patching.** Parse it. Check all `connections` targets resolve. Check node names are unique.
 
 ## The Downstream Impact Rule
@@ -48,7 +48,7 @@ For those edits, inspect:
 
 The patch description must include either:
 - all required downstream fixes, or
-- an explicit warning that downstream compatibility cannot be confirmed and a list of nodes Dave should review.
+- an explicit warning that downstream compatibility cannot be confirmed and a list of nodes the user should review.
 
 ## Risk Classes (the workflow-map taxonomy)
 
@@ -75,7 +75,7 @@ HTTP Request is schema-producing on GET, side-effect on POST/PUT/DELETE.
 | **LOW** | Display-only or label change. Renaming a node that no other node references. Adding a comment. | Apply with a brief note. |
 | **MEDIUM** | Parameter tweak that may affect execution but not obvious schema. Adjusting a retry count. Tweaking an HTTP timeout. | Apply, but mention what to watch for in the next run. |
 | **HIGH** | Code node logic change. Set/Edit Fields field add/remove/rename. AI prompt edit that changes expected output. HTTP Request response shape change. IF/Switch condition change. Merge behavior change. Any change with a side-effect node downstream. | Surface the impact summary. List affected downstream nodes. Propose, don't auto-apply. |
-| **CRITICAL** | Trade/order/payment action downstream. Database delete/update downstream. Production webhook response shape change. Any credential change requested. | **Do not apply without explicit Dave confirmation.** Spell out the worst-case consequences. |
+| **CRITICAL** | Trade/order/payment action downstream. Database delete/update downstream. Production webhook response shape change. Any credential change requested. | **Do not apply without explicit user confirmation.** Spell out the worst-case consequences. |
 
 ## Side-Effect Nodes (full list)
 
@@ -88,7 +88,7 @@ Treat any node that performs one of these operations as a side-effect:
 - Database insert / update / delete (Postgres, MySQL, MongoDB, etc.)
 - File write (S3, FTP, local FS, Google Drive write)
 - HTTP Request with POST/PUT/PATCH/DELETE
-- Trade/order action (Alpaca, IBKR, etc.)
+- Trade/order action (brokerage APIs)
 - Payment action (Stripe, etc.)
 - Notification services (Pushover, Pushbullet)
 - CRM update (HubSpot, Salesforce write)
@@ -109,4 +109,4 @@ If a request seems to require touching one of these, **ask first** and explain w
 
 ## Whole-Workflow Replacement
 
-A patch that replaces the entire `/nodes` array, or replaces the entire workflow object, is almost always wrong. Refuse it unless Dave has explicitly asked for a rewrite. If you find yourself wanting to do this, stop and reconsider — there is almost certainly a smaller, surgical change that achieves the same goal.
+A patch that replaces the entire `/nodes` array, or replaces the entire workflow object, is almost always wrong. Refuse it unless the user has explicitly asked for a rewrite. If you find yourself wanting to do this, stop and reconsider — there is almost certainly a smaller, surgical change that achieves the same goal.

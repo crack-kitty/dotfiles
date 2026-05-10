@@ -1,32 +1,32 @@
-# daves-n8n-patterns
+# n8n-patterns
 
-A Claude Code skill that encodes Dave's n8n editing discipline and recurring gotchas. Designed to trigger any time you (or Claude Code) work with n8n workflows, automations, or scheduled jobs.
+A Claude Code skill that encodes an n8n editing discipline and recurring gotchas. Designed to trigger any time you (or Claude Code) work with n8n workflows, automations, or scheduled jobs.
 
 ## What's in here
 
 ```text
-daves-n8n-patterns/
+n8n-patterns/
 ├── SKILL.md                          # Lean entry point (always loaded as metadata)
 └── references/                       # Loaded only when SKILL.md points to them
     ├── safe-editing-rules.md         # Golden Rule, 13 Hard Rules, risk classes, side-effect list
-    ├── node-gotchas.md               # Loop Over Items, qwen thinking field, fli MCP, etc.
+    ├── node-gotchas.md               # Loop Over Items, local-LLM thinking field, multi-step MCPs, etc.
     ├── expression-scanning.md        # Patterns to grep for downstream impact
     ├── validation-checklist.md       # Post-edit sanity checks
-    └── daves-patterns.md             # FlightCheck, trading bot, Discord alerter conventions
+    └── project-patterns.md           # Project-specific conventions, Discord alerter patterns, reusable flows
 ```
 
 ## Install
 
-Drop the entire `daves-n8n-patterns/` folder into your skills directory:
+Drop the entire `n8n-patterns/` folder into your skills directory:
 
 ```bash
 # For your dotfiles-managed setup
-cp -r daves-n8n-patterns ~/.dotfiles/claude/skills/
+cp -r n8n-patterns ~/.dotfiles/claude/skills/
 
 # Then commit & sync (your usual workflow)
 cd ~/.dotfiles
-git add claude/skills/daves-n8n-patterns
-git commit -m "Add daves-n8n-patterns skill"
+git add claude/skills/n8n-patterns
+git commit -m "Add n8n-patterns skill"
 git push
 ```
 
@@ -39,7 +39,7 @@ cd ~/.dotfiles && git pull && ./install
 
 Claude Code will load this skill automatically when:
 - The user mentions n8n, a specific n8n node type, or a workflow file
-- The user references one of Dave's projects (FlightCheck, trading bot, Daily Collector, etc.)
+- The user references one of their workflow projects
 - The conversation involves automation, scheduled jobs, or workflow editing — even if "n8n" isn't said explicitly
 
 The description in SKILL.md is intentionally "pushy" per Anthropic's skill-authoring guidance — skills tend to under-trigger by default.

@@ -153,8 +153,9 @@ See `~/.claude/skills/*/SKILL.md` for details.
 
 ## Claude Connector (Shared MCP Memory)
 
-The Claude Connector MCP server is always running at **`https://claude-connector.ckcompute.xyz/mcp`**.
+The Claude Connector MCP server is always running at **`<your Claude Connector MCP URL>`**.
 Config is in `~/.claude.json` (HTTP MCP server with Bearer token).
+The actual URL is configured locally in `~/.claude.json` and is not stored in this repo.
 
 When asked to "save to the connector" or "save context and to the connector":
 1. Use `mcp__claude-connector__save_context` with the relevant project name
@@ -205,9 +206,9 @@ At the end of EVERY session, before signing off:
    - Recall the matching fact to get current JSON
    - Update the JSON: change status, remove completed next items, add new ones, update summary
    - Write back via OpenBrain:update
-   - The 8 board categories: StockMaster, FlightCheck, TheSlowDollar, Software Products, Homelab (parts 1+2), Work (TEL), Personal
+   - The configured project board categories
 
-3. **Never skip this.** Dave does not update the board. You do.
+3. **Never skip this.** The user does not update the board. You do.
 
 ---
 

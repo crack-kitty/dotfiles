@@ -1,6 +1,6 @@
 # Validation Checklist
 
-Run through this after any patch, before declaring the edit complete. If any item fails, fix it before handing off to Dave.
+Run through this after any patch, before declaring the edit complete. If any item fails, fix it before handing off to the user.
 
 ## Structural Checks
 
@@ -30,8 +30,8 @@ Run through this after any patch, before declaring the edit complete. If any ite
 ## Branching & Control Flow Checks
 
 - [ ] **IF/Switch conditions still reference fields that exist.** Renamed/removed fields cause silent "always false" routing.
-- [ ] **Loop Over Items output 0 (loop) and output 1 (done) are wired correctly.** This is Dave's #1 recurring trap.
-- [ ] **Merge node inputs come from the streams Dave expects.** Both contracts are handled.
+- [ ] **Loop Over Items output 0 (loop) and output 1 (done) are wired correctly.** This is the #1 recurring trap.
+- [ ] **Merge node inputs come from the streams the user expects.** Both contracts are handled.
 - [ ] **Error workflow / continueOnFail settings were not changed unintentionally.**
 
 ## Side-Effect Awareness
@@ -51,10 +51,10 @@ Run through this after any patch, before declaring the edit complete. If any ite
 
 - [ ] **For non-trivial changes, a fact was saved to OpenBrain** — what changed, why, and any new gotcha discovered.
 - [ ] **For new gotchas that should never repeat, a `kind=rule, severity=BLOCKER` was added.**
-- [ ] **The original workflow file was not overwritten in place** unless Dave explicitly asked.
+- [ ] **The original workflow file was not overwritten in place** unless the user explicitly asked.
 
 ## Final Question
 
-> *"If Dave imports this exact change into production right now, would anything quietly break?"*
+> *"If the user imports this exact change into production right now, would anything quietly break?"*
 
 If you cannot answer "no" with confidence, **do not declare the edit complete**. Surface the doubt.

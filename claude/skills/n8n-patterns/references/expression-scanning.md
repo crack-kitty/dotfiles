@@ -58,7 +58,7 @@ When given a workflow JSON and a node about to be edited:
      "references": ["$json.dividendScore"]
    }
    ```
-5. For each `$json.X` reference, check whether the current edit changes field `X`. If yes, that's a confirmed break point — the patch must update the reference too, or surface the impact to Dave.
+5. For each `$json.X` reference, check whether the current edit changes field `X`. If yes, that's a confirmed break point — the patch must update the reference too, or surface the impact to the user.
 
 ## Code Node Special Handling
 

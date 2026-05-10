@@ -1,6 +1,6 @@
 # Node-Level Gotchas
 
-This is the "scar tissue" file — patterns Claude has gotten wrong on Dave's workflows in the past. Check here whenever the relevant node type appears.
+This is the "scar tissue" file — patterns Claude has gotten wrong on the user's workflows in the past. Check here whenever the relevant node type appears.
 
 ## Loop Over Items (SplitInBatches)
 
@@ -22,35 +22,21 @@ Common mistakes to avoid:
 - Not connecting output 1 at all (final step never runs)
 - Sending the post-processing back into the loop body (infinite re-iteration)
 
-## Local LLM via HTTP Request — qwen returns to `message.thinking`
+## Local LLM via HTTP Request — some models return their answer in `message.thinking`
 
-When calling Dave's Ollama at the local server, the response shape varies by model:
+When calling a local LLM via HTTP Request node, the response shape varies by model. Most models populate `$json.message.content` (the conventional field). Some models put their actual answer in `$json.message.thinking` and leave `content` empty or near-empty. n8n HTTP Request nodes will appear to silently return nothing if downstream nodes read `.content` when the model populated `.thinking`.
 
-| Model | Read field |
-|---|---|
-| `qwen3.6:35b` | `$json.message.thinking` |
-| `deepseek-coder-v2:16b` | `$json.message.content` |
-| Most others | `$json.message.content` |
+**When debugging a workflow that calls a local LLM and gets empty downstream data, the first check is which field the model populates.** If unsure, log the full `$json` to see the shape.
 
-The qwen3.6 model emits its actual answer in a `thinking` field rather than `content`. The `content` field is empty or near-empty. n8n HTTP Request nodes will appear to silently return nothing if downstream nodes read `.content`.
+## MCPs with Multi-Step Session Init
 
-**When debugging an n8n workflow that calls Ollama and gets empty downstream data, the first check is which field the model populates.** If unsure, log the full `$json` to see the shape.
-
-## fli MCP — three-step session init, exact parameters
-
-The `fli` library MCP integration (used in FlightCheck) requires a precise three-step session initialization pattern. Skipping or reordering steps causes silent failures.
-
-Critical parameter requirements:
-- **`cabin_class`** must be `'ECONOMY'` in **uppercase**. Lowercase or title case fails.
-- **`max_results`** is **not** a valid parameter. Including it causes the call to fail. Filter results downstream instead.
-
-When generating any workflow that calls fli, follow the documented three-step init pattern Dave has working in FlightCheck. Don't simplify it.
+Some MCP integrations require a precise multi-step session initialization pattern. Skipping or reordering steps causes silent failures. When generating workflows that call such MCPs, follow the documented init pattern as-is — don't collapse it into a single call. If parameter casing is documented (e.g., enum values that must be uppercase), follow it exactly; deviations often fail silently. Some valid-looking parameters are rejected by certain MCPs — when in doubt, omit and filter results downstream.
 
 ## Schedule Trigger — DST drift
 
 n8n's Schedule Trigger uses the **workflow-level timezone setting** for cron interpretation. If unset, it defaults to the n8n instance's timezone (often UTC).
 
-Of Dave's 9 scheduled workflows audited recently, only 2 had `settings.timezone` set explicitly. The other 7 were running on UTC and had silent off-by-one-hour drift twice a year at DST transitions.
+Most of the user's existing scheduled workflows do not have `settings.timezone` set explicitly — they run on UTC and have silent off-by-one-hour drift twice a year at DST transitions.
 
 **Default to setting `settings.timezone = "America/New_York"` on every workflow that uses Schedule Trigger.** Verify the existing setting before adding/modifying a Schedule Trigger node.
 
@@ -70,18 +56,18 @@ To set this in JSON, look at the workflow root:
 
 If `settings` is missing or doesn't contain `timezone`, add it.
 
-## Anthropic API Node (used in Trading Bot, Alert Engine)
+## Anthropic API Node
 
-When Dave's workflows call Claude via the Anthropic API node:
+When workflows call Claude via the Anthropic API node:
 - The response content lives in `$json.content[0].text` (assuming a single text block).
 - If the model returns JSON, downstream parsing should be defensive — wrap in a Code node with try/catch on `JSON.parse`. Models can return preamble or trailing text even with strict prompts.
-- For the trading bot decision path, the Safety Gate Code node sits between the model output and any Alpaca order action. It enforces: max 5 trades/cycle, max 50 shares per order, no crypto. **Never bypass the Safety Gate** — even on a "small" change.
+- If the workflow has a Safety Gate Code node between the model output and any side-effect action (trade, payment, irreversible API call), **never bypass or weaken the Safety Gate** — even on a "small" change.
 
-## Postgres Node (flightcheck-db, etc.)
+## Postgres Node
 
 - Use parameterized queries. Never interpolate user-controlled strings into SQL via expression substitution.
 - For inserts that may conflict, prefer `ON CONFLICT DO NOTHING` or `ON CONFLICT DO UPDATE` — n8n re-runs are common during debugging and you don't want duplicate rows.
-- The `flightcheck-db` schema has stable table names; if a Code node downstream references columns by name, schema changes need migration coordination.
+- For project databases with stable schemas, if a Code node downstream references columns by name, schema changes need migration coordination.
 
 ## HTTP Request — common mistakes
 

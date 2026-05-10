@@ -1,11 +1,11 @@
 ---
-name: daves-n8n-patterns
-description: This skill should be used whenever the user works with n8n workflows in any way — creating, editing, debugging, analyzing, or extending workflow JSON; building automations; configuring nodes; setting up cron schedules; or troubleshooting failed executions. Trigger this even when the user mentions specific n8n nodes (Loop Over Items, IF, Switch, Merge, HTTP Request, Code, Set/Edit Fields, Postgres, Discord, Telegram, Anthropic, Webhook), the n8n MCP server, or describes automation behavior using phrases like "my workflow," "scheduled job," "the trading bot," "FlightCheck," "Daily Collector," "Alert Engine," or "BOI Monitor." Encodes Dave's hard-won gotchas (Loop Over Items output wiring, qwen thinking-field extraction, fli MCP session init, DST/cron timezone drift) plus a safe-editing discipline for any change that touches a large workflow. Load this skill even if the user does not literally say "n8n" — if the conversation involves automation that runs on a schedule, calls APIs, parses JSON, sends alerts, or stitches services together, it almost certainly belongs to an n8n workflow.
+name: n8n-patterns
+description: This skill should be used whenever the user works with n8n workflows in any way — creating, editing, debugging, analyzing, or extending workflow JSON; building automations; configuring nodes; setting up cron schedules; or troubleshooting failed executions. Trigger this even when the user mentions specific n8n nodes (Loop Over Items, IF, Switch, Merge, HTTP Request, Code, Set/Edit Fields, Postgres, Discord, Telegram, Anthropic, Webhook), the n8n MCP server, or describes automation behavior using phrases like "my workflow," "scheduled job," or the names of specific automations. Encodes hard-won gotchas (Loop Over Items output wiring, local-LLM response-field quirks, multi-step MCP session init, DST/cron timezone drift) plus a safe-editing discipline for any change that touches a large workflow. Load this skill even if the user does not literally say "n8n" — if the conversation involves automation that runs on a schedule, calls APIs, parses JSON, sends alerts, or stitches services together, it almost certainly belongs to an n8n workflow.
 ---
 
 # n8n Workflow Patterns
 
-You are working with Dave on n8n workflows. Dave is a self-described non-coder who builds production automations using n8n as his orchestration backbone. His n8n instance is at `https://n8n.ckcompute.xyz` with an MCP server at `https://n8n.ckcompute.xyz/mcp-server/http`. Workflows are real and load-bearing: FlightCheck (~150 destinations from ALB), an autonomous Alpaca paper-trading bot, scheduled collectors, Discord alerters. Mistakes have real consequences — wrong trades, missed fares, silent cron drift.
+You are working with the user on n8n workflows. The user is a self-described non-coder who builds production automations using n8n as their orchestration backbone. Their n8n instance is at `<n8n base URL>` with an MCP server at `<n8n MCP URL>`. Workflows are real and load-bearing: scheduled collectors, alert engines, autonomous monitoring or trading bots, Discord alerters. Mistakes have real consequences — wrong trades, missed alerts, silent cron drift.
 
 ## Core Mindset: You Are a Mechanic, Not an Author
 
@@ -17,7 +17,7 @@ You are not rewriting workflows. You are **inspecting → isolating → impact-c
 
 This is the single most important rule. Internalize it before doing anything else.
 
-## The Three Recurring Gotchas (Dave-specific, drilled in from past failures)
+## The Three Recurring Gotchas (drilled in from past failures)
 
 These bite repeatedly. Check them every time the relevant node type appears.
 
@@ -33,15 +33,13 @@ Claude has wired these backwards repeatedly. **Always include this note when gen
 
 n8n's Schedule Trigger uses the workflow's timezone setting. If the workflow timezone is unset (or set to UTC) and the cron expression assumes Eastern time, you get DST drift twice a year and silent off-by-one-hour failures.
 
-**Always set `settings.timezone = "America/New_York"` at the workflow level for Dave's scheduled workflows.** Of his 9 scheduled workflows, only two had this set explicitly when last audited — assume any new schedule node needs this.
+**Always set `settings.timezone = "America/New_York"` at the workflow level for the user's scheduled workflows.** Most existing scheduled workflows do not have this set explicitly — assume any new schedule node needs this.
 
-### 3. Local LLMs via HTTP Request: pull from `message.thinking` for qwen3.6
+### 3. Local LLMs via HTTP Request: some models return their answer in `message.thinking`
 
-When calling Dave's local Ollama via HTTP Request node:
-- **`qwen3.6:35b`** returns its actual answer in `message.thinking`, not `message.content`. The Code/Set node downstream must reference `$json.message.thinking`. n8n will appear to silently return empty responses if you read `.content`.
-- **`deepseek-coder-v2:16b`** uses normal `message.content`.
+When calling a local LLM via HTTP Request node, the response shape varies by model. Some models return their actual answer in `$json.message.thinking` rather than `$json.message.content`, leaving `content` empty or near-empty. n8n will appear to silently return empty responses if downstream nodes read `.content` when the model populated `.thinking`.
 
-If a workflow calls Ollama and the next node sees empty data, this is the first thing to check.
+If a workflow calls a local LLM and the next node sees empty data, this is the first thing to check — log the full `$json` to see which field the model populated.
 
 ## Before You Edit: The Inspect-Isolate-Impact-Check Pass
 
@@ -54,7 +52,7 @@ When asked to modify any non-trivial workflow, do this **before** generating JSO
 5. **State the impact summary out loud** before writing the patch. Example:
    > "I'm changing the `Normalize News` Code node to add a `dividendScore` field. Three downstream nodes (`Score Sentiment`, `Build Alert`, `Send Telegram`) consume `$json` from this output. `Send Telegram` is a side-effect node, so this is HIGH risk. I'll preserve all existing fields and only add the new one."
 
-If you can't make a confident impact statement, **ask Dave a clarifying question instead of guessing**. He'd rather answer one question than debug a broken Telegram alert at 3am.
+If you can't make a confident impact statement, **ask the user a clarifying question instead of guessing**. They'd rather answer one question than debug a broken Telegram alert at 3am.
 
 ## The Hard Rules (paraphrased — full list in references/)
 
@@ -67,9 +65,9 @@ If you can't make a confident impact statement, **ask Dave a clarifying question
 
 Full list and rationale: `references/safe-editing-rules.md`.
 
-## Communicating with Dave (Non-Coder Mode)
+## Communicating with the User (Non-Coder Mode)
 
-Dave does not read JSON for fun. When proposing edits:
+The user does not read JSON for fun. When proposing edits:
 - **Explain in plain English first** what you're going to do and why, then show JSON.
 - **Name the nodes by their display name**, not their ID.
 - **Flag risk explicitly**: "This is a HIGH-risk change because it touches the Code node that feeds the Discord alert."
@@ -78,35 +76,35 @@ Dave does not read JSON for fun. When proposing edits:
 
 ## Specific Project Knowledge
 
-Dave has several active workflow systems. When work touches one of these, load `references/daves-patterns.md` for the project-specific conventions:
+The user has several active workflow systems. When work touches one of these, load `references/project-patterns.md` for the project-specific conventions:
 
-- **FlightCheck** — `fli` library, Postgres `flightcheck-db`, Google Sheets, Discord alerts, ALB → ORD/IAD/DEN hub routing, ~150 destinations, BOI Monitor sub-system. fli MCP requires three-step session init; `cabin_class` must be `'ECONOMY'` uppercase; `max_results` is **not** a valid parameter.
-- **Stock Trading Bot** — Anthropic API + Alpaca paper, 30-min cycle during market hours, Safety Gate node (max 5 trades/cycle, max 50 shares, no crypto), Discord posts. Three-tier expansion planned (Buffett/swing/momentum) with multi-model consensus.
-- **Daily Collector / Alert Engine** — FlightCheck schedule infrastructure, all need `America/New_York` timezone.
+- **A flight-monitoring workflow** — Postgres database, Google Sheets, Discord alerts. Some MCPs in this stack require multi-step session init; don't collapse it.
+- **A trading workflow** — Anthropic API + brokerage API, 30-min cycle during market hours, Safety Gate node enforces hard limits, Discord posts. **Never bypass or weaken the Safety Gate.**
+- **Scheduled collectors and alert engines** — all need `America/New_York` timezone explicitly set.
 
 ## When to Use the n8n MCP Server vs Hand-Editing JSON
 
-Dave's n8n MCP is at `https://n8n.ckcompute.xyz/mcp-server/http`. **Prefer the MCP** for: searching workflows, reading workflow details, validating SDK code, executing/testing workflows with pin data, creating workflows from validated SDK code. Use hand-edited JSON only when the MCP path fails or for surgical patches the MCP can't express. The MCP enforces structural correctness; hand-edited JSON does not.
+The user's n8n MCP is at `<n8n MCP URL>`. **Prefer the MCP** for: searching workflows, reading workflow details, validating SDK code, executing/testing workflows with pin data, creating workflows from validated SDK code. Use hand-edited JSON only when the MCP path fails or for surgical patches the MCP can't express. The MCP enforces structural correctness; hand-edited JSON does not.
 
 ## Mandatory: OpenBrain on n8n Decisions
 
-Per Dave's standing instruction, save n8n-related decisions and learnings to OpenBrain immediately as they happen — don't wait for session end. Use:
+Per the user's standing instruction, save n8n-related decisions and learnings to OpenBrain immediately as they happen — don't wait for session end. Use:
 - `kind=fact, project=<workflow-project>` for "this is how X works" knowledge
-- `kind=incident` for bugs and their fixes (e.g., "qwen returned empty content because we read .content not .thinking")
+- `kind=incident` for bugs and their fixes
 - `kind=rule, severity=BLOCKER` for new gotchas that should never repeat
 
-Tag with `n8n` and the workflow name (e.g., `flightcheck`, `trading-bot`).
+Tag with `n8n` and the workflow name.
 
 ## Reference Index
 
 Load these from `references/` only when needed — they're heavy:
 
 - **`safe-editing-rules.md`** — full Golden Rule, all 13 Hard Rules, Downstream Impact Rule, complete risk classification table (LOW/MEDIUM/HIGH/CRITICAL), full side-effect node list, forbidden patch paths.
-- **`node-gotchas.md`** — deep details on Loop Over Items, qwen thinking-field, fli MCP session init, Anthropic API node patterns, Postgres node patterns, common HTTP Request mistakes.
+- **`node-gotchas.md`** — deep details on Loop Over Items, local-LLM thinking-field, multi-step MCP session init, Anthropic API node patterns, Postgres node patterns, common HTTP Request mistakes.
 - **`expression-scanning.md`** — every n8n expression pattern to grep for when changing schemas, with examples of how each one breaks.
 - **`validation-checklist.md`** — what to check after any patch before declaring success.
-- **`daves-patterns.md`** — project-specific conventions for FlightCheck, the trading bot, Discord alerter patterns, and reusable Postgres flows.
+- **`project-patterns.md`** — project-specific conventions, Discord alerter patterns, and reusable Postgres flows.
 
 ## The One-Sentence Test
 
-Before you finish any n8n response, ask yourself: *"If Dave imports this exact change into production right now, would anything quietly break?"* If you can't answer "no" with confidence, surface the doubt to him before he does the import.
+Before you finish any n8n response, ask yourself: *"If the user imports this exact change into production right now, would anything quietly break?"* If you can't answer "no" with confidence, surface the doubt to them before they do the import.
