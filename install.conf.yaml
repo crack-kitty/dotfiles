@@ -19,6 +19,15 @@
     - command: git -C ~/.dotfiles submodule update --init --recursive
       description: Initialize git submodules (vendor skills, etc.)
 
+# Versioned git hooks and secret scanning
+- shell:
+    - command: '[ -x "$HOME/go/bin/gitleaks" ] || go install github.com/zricethezav/gitleaks/v8@v8.30.1'
+      description: Install gitleaks v8.30.1 if missing
+      stdout: true
+      stderr: true
+    - command: git -C ~/.dotfiles config core.hooksPath githooks
+      description: Use versioned git hooks
+
 # Claude Code config - remove real dir if it exists so dotbot can symlink it
 - shell:
     - command: '[ -d ~/.claude ] && [ ! -L ~/.claude ] && rm -rf ~/.claude || true'

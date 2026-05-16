@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v gitleaks >/dev/null 2>&1; then
+    GITLEAKS="$(command -v gitleaks)"
+elif [ -x "$HOME/go/bin/gitleaks" ]; then
+    GITLEAKS="$HOME/go/bin/gitleaks"
+else
+    echo "gitleaks is required for commits. Run: go install github.com/zricethezav/gitleaks/v8@v8.30.1" >&2
+    exit 1
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+"$GITLEAKS" protect --staged --redact --no-banner --source "$repo_root"
