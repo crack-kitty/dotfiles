@@ -2,6 +2,10 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+for env_file in "$HOME/.config/codex/env" "$HOME/.dotfiles/.local.env"; do
+    [ -r "$env_file" ] && . "$env_file"
+done
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;

@@ -11,6 +11,9 @@
     ~/.bashrc: .bashrc
     ~/.profile: .profile
 
+- create:
+    - ~/.codex
+
 # Vendor skills (submodules) — init before symlinks resolve
 - shell:
     - command: git -C ~/.dotfiles submodule update --init --recursive
@@ -23,6 +26,7 @@
 
 - link:
     ~/.claude: claude
+    ~/.codex/config.toml: codex/config.toml
 
 # Codex CLI for the codex@openai-codex Claude Code plugin
 - shell:

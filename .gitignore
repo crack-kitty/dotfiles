@@ -5,6 +5,7 @@
 .claude/
 
 # Sensitive data
+.local.env
 claude/.credentials.json
 claude/*.key
 claude/*.pem
@@ -13,10 +14,19 @@ claude/*secret*
 claude/*password*
 claude/.mcp.json
 claude/settings.local.json
+codex/auth.json
+codex/*.env
+codex/*secret*
+codex/*password*
 
 # Machine-specific state
 claude/.memhash/
 claude/.last-cleanup
+codex/cache/
+codex/log/
+codex/logs/
+codex/sessions/
+codex/tmp/
 
 # Session and state data
 claude/backups/

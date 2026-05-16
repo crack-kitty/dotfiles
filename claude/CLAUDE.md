@@ -201,15 +201,6 @@ At the end of EVERY session, before signing off:
    - source: "claude-code"
    - tags: relevant tags
 
-2. **Update project board** — If any project's status, next steps, or scope changed:
-   - Search OpenBrain: project=project-board, query="project board [category name]"
-   - Recall the matching fact to get current JSON
-   - Update the JSON: change status, remove completed next items, add new ones, update summary
-   - Write back via OpenBrain:update
-   - The configured project board categories
-
-3. **Never skip this.** The user does not update the board. You do.
-
 ---
 
 ## Changelog
