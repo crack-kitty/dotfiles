@@ -36,8 +36,10 @@ claude/CHECKPOINT
 claude/.checkpoints/
 claude/.session/
 claude/.update.lock
+claude/scheduled_tasks.lock
 claude/history.jsonl
 claude/history/
+claude/research/
 claude/stats-cache.json
 claude/*.code-workspace
 
