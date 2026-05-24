@@ -1,8 +1,24 @@
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 [projects."/home/dave/appdev/miletrack"]
 trust_level = "trusted"
 
 [projects."/apps/onramp"]
 trust_level = "trusted"
+
+[projects."/home/dave"]
+trust_level = "trusted"
+
+[projects."/home/dave/appdev/openbrain-mcp"]
+trust_level = "trusted"
+
+[tui]
+status_line = [
+  "model-with-reasoning",
+  "current-dir",
+  "git-branch",
+  "context-used",
+]
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
@@ -10,3 +26,12 @@ trust_level = "trusted"
 [mcp_servers.n8n]
 url = "https://n8n-mcp.ckcompute.xyz/mcp"
 bearer_token_env_var = "N8N_MCP_TOKEN"
+
+[plugins."google-drive@openai-curated"]
+enabled = true
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."superpowers@openai-curated"]
+enabled = true
