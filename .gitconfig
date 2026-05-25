@@ -32,7 +32,7 @@
 	rebase = true
 [credential "https://github.com"]
 	helper =
-	helper = !gh auth git-credential
+	helper = !$HOME/.local/bin/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper =
-	helper = !gh auth git-credential
+	helper = !$HOME/.local/bin/gh auth git-credential
