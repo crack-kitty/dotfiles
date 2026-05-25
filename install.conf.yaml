@@ -21,8 +21,8 @@
 
 # Versioned git hooks and secret scanning
 - shell:
-    - command: '[ -x "$HOME/go/bin/gitleaks" ] || go install github.com/zricethezav/gitleaks/v8@v8.30.1'
-      description: Install gitleaks v8.30.1 if missing
+    - command: '[ -x "$HOME/go/bin/gitleaks" ] || (mkdir -p "$HOME/go/bin" && os=$(uname -s | tr A-Z a-z) && arch=$(uname -m | sed "s/x86_64/x64/;s/aarch64/arm64/") && curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_${os}_${arch}.tar.gz" | tar -xzC "$HOME/go/bin" gitleaks)'
+      description: Install gitleaks v8.30.1 if missing (prebuilt binary, no Go required)
       stdout: true
       stderr: true
     - command: git -C ~/.dotfiles config core.hooksPath githooks
