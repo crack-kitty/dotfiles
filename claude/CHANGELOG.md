@@ -38,3 +38,12 @@
 **Why:** Statusline silently broke (empty model, 0% context, empty rate limits) on a machine where jq wasn't installed; every `jq` subshell failed and Bash treated the empty `$(...)` as a blank field. Claude Code launches the statusline with a PATH that excludes `~/.local/bin`, so installing there alone wasn't enough — the script needs to extend PATH itself.
 
 **Files:** ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/statusline-command.sh, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-05-25: Install GitHub CLI via dotbot
+
+**Added:**
+- `install.conf.yaml` shell block that extracts gh 2.92.0 to `~/.local/bin/gh` if missing (Linux only; uses `curl | tar -xzC --strip-components=2` to pull just the binary out of the official tarball)
+
+**Why:** gh was the actual missing piece on a fresh machine (git/node/python ship with Ubuntu, gh doesn't). Matches the gitleaks/jq prebuilt-binary user-prefix pattern, no sudo required.
+
+**Files:** ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/CHANGELOG.md

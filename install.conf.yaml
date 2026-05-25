@@ -29,6 +29,10 @@
       description: Install jq 1.8.1 to ~/.local/bin if missing (required by statusline)
       stdout: true
       stderr: true
+    - command: 'command -v gh >/dev/null 2>&1 || [ -x "$HOME/.local/bin/gh" ] || (mkdir -p "$HOME/.local/bin" && ver=2.92.0 && arch=$(uname -m | sed "s/x86_64/amd64/;s/aarch64/arm64/") && curl -fsSL "https://github.com/cli/cli/releases/download/v${ver}/gh_${ver}_linux_${arch}.tar.gz" | tar -xzC "$HOME/.local/bin" --strip-components=2 "gh_${ver}_linux_${arch}/bin/gh")'
+      description: Install GitHub CLI 2.92.0 to ~/.local/bin if missing (Linux only; macOS uses brew)
+      stdout: true
+      stderr: true
     - command: git -C ~/.dotfiles config core.hooksPath githooks
       description: Use versioned git hooks
 
