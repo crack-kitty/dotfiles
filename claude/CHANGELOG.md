@@ -28,3 +28,13 @@
 **Why:** Prose output from Claude (commits, PR descriptions, docs, replies) drifts toward em-dashes, "delve/leverage/utilize," dramatic headings, and hollow claims. Inline rules catch the common cases in all output; skill carries the full banned-words catalog and WRONG/RIGHT examples for dedicated writing tasks.
 
 **Files:** ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/claude/skills/no-ai-slop/SKILL.md, ~/.dotfiles/claude/skills/no-ai-slop/references/ai-writing-detection.md, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-05-25: Install jq via dotbot, harden statusline PATH
+
+**Added:**
+- `install.conf.yaml` shell block that downloads jq 1.8.1 to `~/.local/bin/jq` if missing (no sudo, mirrors the gitleaks prebuilt-binary pattern; cross-platform via `uname`-derived `${os}-${arch}` suffix)
+- `export PATH="$HOME/.local/bin:$PATH"` at top of `statusline-command.sh` so it finds jq regardless of how Claude Code launches the script
+
+**Why:** Statusline silently broke (empty model, 0% context, empty rate limits) on a machine where jq wasn't installed; every `jq` subshell failed and Bash treated the empty `$(...)` as a blank field. Claude Code launches the statusline with a PATH that excludes `~/.local/bin`, so installing there alone wasn't enough — the script needs to extend PATH itself.
+
+**Files:** ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/statusline-command.sh, ~/.dotfiles/claude/CHANGELOG.md

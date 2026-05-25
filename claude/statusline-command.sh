@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH="$HOME/.local/bin:$PATH"
 input=$(cat)
 
 # Model - handle both string and object formats
