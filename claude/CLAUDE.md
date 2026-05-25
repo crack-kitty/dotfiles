@@ -72,6 +72,29 @@ Prefer deterministic, reproducible, predictable solutions over non-deterministic
 
 Exceptions are fine when non-determinism is inherent (UUIDs, crypto randomness, ML) — but justify the choice.
 
+### Facts, Sources, and Claims
+
+- Treat factual prose like code: unverified claims are bugs to fix, not draft material to ship.
+- If a claim depends on current behavior, inspect the code, run the command, query the database, or read the logs before writing it. Live verification beats remembered fact.
+- Do not narrate failed research. Do not write "could not be located," "no record was found," or "as of [date]" qualifiers on your own inability to find something. Report what is known and verified; silently omit what is not, unless the user asked for the research process.
+
+## Writing and Prose Quality
+
+Applies to: documentation, READMEs, comments, PR descriptions, commit messages, user-facing copy, issues, emails, and explanations.
+
+- **No em dashes** - Use a comma, colon, semicolon, parentheses, or split the sentence.
+- **No synthetic enthusiasm** - No cheerleading, exclamation marks, "excited to announce," "game-changing," or marketing tone.
+- **No filler phrases** - Ban: "It's important to note," "In today's world," "When it comes to," "At the end of the day," "That being said," "Let's dive in," "Here's the thing."
+- **No AI transition words** - Avoid "furthermore," "moreover," "in essence," "at its core," "it is worth noting," "in the landscape of." Use plain connectors: also, but, however, still.
+- **No AI verbs and inflated adjectives** - Avoid "leverage," "utilize," "facilitate," "streamline," "delve," "foster," "bolster," "unveil," "robust," "seamless," "comprehensive," "pivotal." Use the plain equivalent.
+- **No intensifiers without evidence** - "Significantly," "dramatically," "extremely," "truly," "literally" are placeholders for facts. Replace with the number or cut the word.
+- **No hollow claims** - Every claim must end on a concrete detail: file path, function name, failing test, log line, version, metric, source, or observed behavior.
+- **No unsourced numbers** - Never invent statistics, percentages, counts, timelines, benchmark results, or impact estimates. Query the source or omit the number.
+- **No fabricated attribution** - Do not claim a person, company, project, issue, PR, or document said something unless you can cite the exact source.
+- **No fabricated examples** - Do not invent case studies, incidents, user stories, or "for example" scenarios and present them as real.
+- **Concrete headings only** - Headings describe the section content directly. No movie-poster headings: "The Hidden Cost," "The Real Problem," "Why This Matters," "A Better Way."
+- **Self-check before returning prose** - Scan for em-dashes, banned verbs/transitions/intensifiers, hollow claims, unsourced numbers, and dramatic headings. For dedicated writing tasks, invoke the `no-ai-slop` skill for the full banned-word reference and WRONG/RIGHT examples.
+
 ## Common Pitfalls
 
 - **Time estimates** - Never give them ("~2 hours", "Phase 1: 1 day"). Just describe steps.
