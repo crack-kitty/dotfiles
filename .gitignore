@@ -22,6 +22,7 @@ codex/*password*
 # Machine-specific state
 claude/.memhash/
 claude/.last-cleanup
+claude/.last-update-result.json
 codex/cache/
 codex/log/
 codex/logs/
