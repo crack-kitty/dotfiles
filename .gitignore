@@ -29,6 +29,13 @@ codex/logs/
 codex/sessions/
 codex/tmp/
 
+# Background daemon and jobs
+claude/daemon.lock
+claude/daemon.log
+claude/daemon.status.json
+claude/daemon/
+claude/jobs/
+
 # Session and state data
 claude/backups/
 claude/mcp-needs-auth-cache.json
