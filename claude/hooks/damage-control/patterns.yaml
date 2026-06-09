@@ -640,11 +640,9 @@ bashToolPatterns:
     ask: true
     exfil: true
 
-  # Ping to constructed hostnames can leak data via DNS resolution
-  - pattern: '\bping\s+.*\S+\.\S+\.\S+'
-    reason: "Ping to hostname can leak data via DNS resolution"
-    ask: true
-    exfil: true
+  # NOTE: ping exfil rule removed - it could not parse a host out of the command
+  # so private LAN IPs were never exempted, making it nag on every homelab ping.
+  # Low exfil value. Re-add with host-parsing support if DNS-leak coverage is needed.
 
   # ---------------------------------------------------------------------------
   # NETWORK UPLOAD - HTTP/socket data transmission
@@ -1082,7 +1080,9 @@ zeroAccessPaths:
   # ---------------------------------------------------------------------------
   - "dump.sql"
   - "backup.sql"
-  - "*.dump"
+  # NOTE: bare "*.dump" removed - it is a substring match that hard-blocks any
+  # command containing ".dump" (e.g. json.dumps). Named dump files above still
+  # covered. Re-add a more specific glob if real *.dump files need protection.
 
   # ---------------------------------------------------------------------------
   # WINDOWS CREDENTIAL STORES (MITRE T1003.002, T1003.004, T1003.005)
