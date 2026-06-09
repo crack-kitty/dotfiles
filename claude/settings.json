@@ -1,6 +1,17 @@
 {
   "includeCoAuthoredBy": false,
-  "hooks": {},
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash $HOME/.claude/hooks/settings-guard.sh"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "bash -c '$HOME/.claude/statusline-command.sh'"
