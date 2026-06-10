@@ -7,6 +7,10 @@
           {
             "type": "command",
             "command": "bash $HOME/.claude/hooks/settings-guard.sh"
+          },
+          {
+            "type": "command",
+            "command": "DASHBOARD_HOOK_CWD=\"$PWD\" bash -lc 'cd /home/dave/appdev/dashboard && /home/dave/.local/bin/uv run python -m dashboard.report --source claude-code >> /home/dave/.claude/logs/dashboard-hook.log 2>&1'"
           }
         ]
       }
