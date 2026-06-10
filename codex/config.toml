@@ -27,6 +27,10 @@ status_line = [
 url = "https://n8n-mcp.ckcompute.xyz/mcp"
 bearer_token_env_var = "N8N_MCP_TOKEN"
 
+[mcp_servers.homeassistant]
+url = "http://192.168.22.50:8123/api/mcp"
+bearer_token_env_var = "HOMEASSISTANT_TOKEN"
+
 [plugins."google-drive@openai-curated"]
 enabled = true
 
@@ -35,3 +39,8 @@ enabled = true
 
 [plugins."superpowers@openai-curated"]
 enabled = true
+
+[hooks.state]
+
+[hooks.state."/home/dave/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:f31f5e5c72d4c7888d436f63d042e2bc158e45b2fb2bd7b176833e6dd1bd6ff2"

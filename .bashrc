@@ -2,7 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-for env_file in "$HOME/.config/codex/env" "$HOME/.dotfiles/.local.env"; do
+for env_file in "$HOME/.config/codex/env" "$HOME/.dotfiles/.local.env" "$HOME/.secrets"; do
     [ -r "$env_file" ] && . "$env_file"
 done
 
