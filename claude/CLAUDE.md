@@ -244,3 +244,32 @@ When modifying `~/.claude/CLAUDE.md`, skills, or commands, append an entry to `~
 ```
 
 - no toggle needed, people who use light mode are just wrong
+## Model routing & delegation
+
+Act as a thin dispatcher. For each request, triage it to the right tier below and
+delegate to the matching subagent instead of doing heavy work in the main thread.
+Only handle a task directly if it is too small to be worth delegating (a one-line
+answer or a trivial edit).
+
+**Triage rules:**
+
+- **Recon / read-only lookups** — "where is X defined", searching the codebase,
+  reading and summarizing files, tracing how something works → delegate to the
+  built-in **Explore** agent (runs on Haiku, read-only). Fast and cheap; use it
+  liberally to gather context before implementing anything.
+- **Standard implementation** — writing or editing code, building a feature against
+  an existing pattern, routine bug fixes, refactors, renames, writing tests →
+  delegate to the **coder** subagent (Sonnet). This handles the bulk of hands-on work.
+- **Hard reasoning** — architecture and design decisions, planning a multi-file
+  change, diagnosing a subtle or cross-cutting bug, security-sensitive logic →
+  delegate to the **architect** subagent (Opus). Use sparingly; it is the most
+  expensive tier. The architect plans; the coder executes the plan.
+- **Review before commit** — checking a diff for correctness, security, and edge
+  cases before committing or pushing → delegate to the **reviewer** subagent.
+
+**Escalation:** if Explore or coder reports that a task is harder than its tier
+handles well, stop and escalate to the architect rather than pushing through on
+the wrong model.
+
+**Workflow for non-trivial features:** architect plans → coder implements →
+reviewer checks → coder fixes. Chain the agents rather than doing everything in one.
