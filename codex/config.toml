@@ -43,4 +43,4 @@ enabled = true
 [hooks.state]
 
 [hooks.state."/home/dave/.codex/hooks.json:stop:0:0"]
-trusted_hash = "sha256:f31f5e5c72d4c7888d436f63d042e2bc158e45b2fb2bd7b176833e6dd1bd6ff2"
+trusted_hash = "sha256:fc3d3eea9ec76d453e10ca85d8472ba3037fc6094e507077d2056a88bdec2482"
