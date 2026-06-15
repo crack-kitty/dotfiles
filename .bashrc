@@ -127,6 +127,14 @@ alias dpsp='docker ps --format="table {{.Names}}\t{{.ID}}\t{{.Image}}\t{{.Runnin
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/flutter/bin:$PATH"
 
+codex() {
+    "$HOME/.codex/codex-auto" "$@"
+}
+
+alias codex-base='CODEX_AUTO_DISABLE=1 codex'
+alias codex-triage='CODEX_AUTO_DISABLE=1 codex --profile triage'
+alias codex-deep='CODEX_AUTO_DISABLE=1 codex --profile deep-work'
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

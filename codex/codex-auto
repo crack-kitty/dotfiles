@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+real_codex="${CODEX_REAL:-$HOME/.local/bin/codex}"
+if [ ! -x "$real_codex" ]; then
+    real_codex="$(PATH="${PATH//$HOME\/.local\/bin:/}" command -v codex)"
+fi
+
+has_explicit_model_or_profile() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            --profile|-p|--profile=*|-p=*|--model|-m|--model=*|-m=*|model=*|model_reasoning_effort=*|*.model=*|*.model_reasoning_effort=*)
+                return 0
+                ;;
+        esac
+    done
+    return 1
+}
+
+classify_prompt() {
+    local prompt lower words
+    prompt="$1"
+    lower="$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')"
+    words="$(printf '%s' "$prompt" | wc -w | tr -d ' ')"
+
+    if printf '%s' "$lower" | rg -q '\b(architecture|architect|design|migration|migrate|refactor|debug|bug|failing|failure|race|security|threat|vulnerability|performance|optimi[sz]e|investigate|root cause|plan|implement|feature|multi-step|complex|hard|review this branch|review current changes)\b'; then
+        printf 'deep-work'
+        return
+    fi
+
+    if [ "$words" -le 40 ] && printf '%s' "$lower" | rg -q '\b(list|show|print|read|cat|grep|search|find|status|summari[sz]e|format|rename|typo|docstring|comment|simple|trivial|mechanical)\b'; then
+        printf 'triage'
+        return
+    fi
+
+    printf ''
+}
+
+insert_profile_after_exec() {
+    local profile="$1"
+    shift
+    if [ "${1:-}" = "exec" ] || [ "${1:-}" = "e" ]; then
+        printf '%s\0' "$1" "--profile" "$profile" "${@:2}"
+    else
+        printf '%s\0' "--profile" "$profile" "$@"
+    fi
+}
+
+main() {
+    if [ -n "${CODEX_AUTO_DISABLE:-}" ] || has_explicit_model_or_profile "$@"; then
+        exec "$real_codex" "$@"
+    fi
+
+    local mode="" prompt="" stdin_file=""
+    if [ "${1:-}" = "exec" ] || [ "${1:-}" = "e" ]; then
+        mode="exec"
+        shift
+    elif [ $# -gt 0 ] && [[ "${1:-}" != -* ]]; then
+        case "$1" in
+            apply|archive|cloud|completion|debug|doctor|features|fork|help|login|logout|mcp|mcp-server|plugin|remote-control|resume|review|sandbox|unarchive|update|exec-server|app-server)
+                exec "$real_codex" "$@"
+                ;;
+        esac
+    fi
+
+    local args=("$@")
+    local arg skip_next=0
+    for arg in "${args[@]}"; do
+        if [ "$skip_next" -eq 1 ]; then
+            skip_next=0
+            continue
+        fi
+        case "$arg" in
+            -c|--config|-i|--image|-s|--sandbox|-C|--cd|--add-dir|-a|--ask-for-approval|-o|--output-last-message|--output-schema|--color|--remote|--remote-auth-token-env)
+                skip_next=1
+                ;;
+            --config=*|--image=*|--sandbox=*|--cd=*|--add-dir=*|--ask-for-approval=*|--output-last-message=*|--output-schema=*|--color=*|--remote=*|--remote-auth-token-env=*|--enable=*|--disable=*)
+                ;;
+            --*)
+                ;;
+            -*)
+                ;;
+            *)
+                prompt+="${prompt:+ }$arg"
+                ;;
+        esac
+    done
+
+    if [ -z "$prompt" ] && [ ! -t 0 ]; then
+        stdin_file="$(mktemp)"
+        cat > "$stdin_file"
+        prompt="$(cat "$stdin_file")"
+    fi
+
+    local profile
+    profile="$(classify_prompt "$prompt")"
+
+    if [ -n "${CODEX_AUTO_TRACE:-}" ]; then
+        printf 'codex-auto profile=%s prompt_words=%s\n' "${profile:-base}" "$(printf '%s' "$prompt" | wc -w | tr -d ' ')" >&2
+    fi
+
+    if [ -z "$profile" ]; then
+        if [ -n "$stdin_file" ]; then
+            if [ "$mode" = "exec" ]; then
+                exec "$real_codex" exec "${args[@]}" < "$stdin_file"
+            fi
+            exec "$real_codex" "${args[@]}" < "$stdin_file"
+        fi
+        if [ "$mode" = "exec" ]; then
+            exec "$real_codex" exec "${args[@]}"
+        fi
+        exec "$real_codex" "${args[@]}"
+    fi
+
+    local routed=()
+    if [ "$mode" = "exec" ]; then
+        routed=("exec" "--profile" "$profile" "${args[@]}")
+    else
+        routed=("--profile" "$profile" "${args[@]}")
+    fi
+
+    if [ -n "$stdin_file" ]; then
+        exec "$real_codex" "${routed[@]}" < "$stdin_file"
+    fi
+    exec "$real_codex" "${routed[@]}"
+}
+
+main "$@"
