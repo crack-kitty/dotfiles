@@ -116,6 +116,64 @@ function Set-TomlTableValue {
     return @($Lines) + @("", $header, "$Key = $Value")
 }
 
+function Set-TomlTableMultilineValue {
+    param(
+        [string[]]$Lines,
+        [string]$Table,
+        [string]$Key,
+        [string[]]$ValueLines
+    )
+
+    $header = "[$Table]"
+    $headerPattern = "^\s*\[$([regex]::Escape($Table))\]\s*$"
+    $keyPattern = "^\s*$([regex]::Escape($Key))\s*="
+    if ($ValueLines.Count -eq 0) {
+        throw "ValueLines must contain at least one line."
+    }
+
+    $replacement = @("$Key = $($ValueLines[0])")
+    if ($ValueLines.Count -gt 1) {
+        $replacement += $ValueLines[1..($ValueLines.Count - 1)]
+    }
+
+    for ($i = 0; $i -lt $Lines.Count; $i++) {
+        if ($Lines[$i] -notmatch $headerPattern) {
+            continue
+        }
+
+        $insertAt = $i + 1
+        for ($j = $i + 1; $j -lt $Lines.Count; $j++) {
+            if ($Lines[$j] -match '^\s*\[') {
+                break
+            }
+
+            if ($Lines[$j] -match $keyPattern) {
+                $end = $j
+                if ($Lines[$j] -match '=\s*\[' -and $Lines[$j] -notmatch '\]\s*(#.*)?$') {
+                    for ($k = $j + 1; $k -lt $Lines.Count; $k++) {
+                        $end = $k
+                        if ($Lines[$k] -match '^\s*\]' -or $Lines[$k] -match '\]\s*(#.*)?$') {
+                            break
+                        }
+                    }
+                }
+
+                $before = if ($j -gt 0) { $Lines[0..($j - 1)] } else { @() }
+                $after = if ($end + 1 -lt $Lines.Count) { $Lines[($end + 1)..($Lines.Count - 1)] } else { @() }
+                return @($before) + $replacement + @($after)
+            }
+
+            $insertAt = $j + 1
+        }
+
+        $before = if ($insertAt -gt 0) { $Lines[0..($insertAt - 1)] } else { @() }
+        $after = if ($insertAt -lt $Lines.Count) { $Lines[$insertAt..($Lines.Count - 1)] } else { @() }
+        return @($before) + $replacement + @($after)
+    }
+
+    return @($Lines) + @("", $header) + $replacement
+}
+
 $homeDir = [Environment]::GetFolderPath("UserProfile")
 
 $codexDir = Join-Path $homeDir ".codex"
@@ -173,6 +231,14 @@ $lines = Set-TomlTableValue -Lines $lines -Table "mcp_servers.n8n" -Key "url" -V
 $lines = Set-TomlTableValue -Lines $lines -Table "mcp_servers.n8n" -Key "bearer_token_env_var" -Value '"N8N_MCP_TOKEN"'
 $lines = Set-TomlTableValue -Lines $lines -Table "mcp_servers.homeassistant" -Key "url" -Value '"http://192.168.22.50:8123/api/mcp"'
 $lines = Set-TomlTableValue -Lines $lines -Table "mcp_servers.homeassistant" -Key "bearer_token_env_var" -Value '"HOMEASSISTANT_TOKEN"'
+$lines = Set-TomlTableMultilineValue -Lines $lines -Table "tui" -Key "status_line" -ValueLines @(
+    "[",
+    '  "model-with-reasoning",',
+    '  "current-dir",',
+    '  "git-branch",',
+    '  "context-used",',
+    "]"
+)
 
 $lines | Set-Content -LiteralPath $codexConfigPath -Encoding utf8
 
