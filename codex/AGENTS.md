@@ -16,3 +16,8 @@ and cross-file decisions in the root session; send bounded exploration,
 summaries, simple checks, and mechanical edits to `cheap-worker` and wait for
 the result before integrating it. Plan first, implement second, review before
 committing.
+
+
+## Timezone handling
+
+Dave is in the `America/New_York` timezone (Eastern Time). Always interpret and display relative dates and times in `America/New_York` unless Dave explicitly says otherwise. Convert UTC, server, container, database, Grafana, and other local machine times to `America/New_York` before reporting them. Never assume UTC or Pacific/server-local time is Dave's timezone.
