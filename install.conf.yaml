@@ -13,6 +13,7 @@
 
 - create:
     - ~/.codex
+    - ~/.codex/agents
 
 # Vendor skills (submodules) — init before symlinks resolve
 - shell:
