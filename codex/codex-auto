@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+for env_file in "$HOME/.config/codex/env" "$HOME/.dotfiles/.local.env" "$HOME/.secrets"; do
+    if [ -r "$env_file" ]; then
+        set +u
+        . "$env_file"
+        set -u
+    fi
+done
+
 real_codex="${CODEX_REAL:-$HOME/.local/bin/codex}"
 if [ ! -x "$real_codex" ]; then
     real_codex="$(PATH="${PATH//$HOME\/.local\/bin:/}" command -v codex)"

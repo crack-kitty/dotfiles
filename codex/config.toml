@@ -39,6 +39,10 @@ bearer_token_env_var = "N8N_MCP_TOKEN"
 url = "http://192.168.22.50:8123/api/mcp"
 bearer_token_env_var = "HOMEASSISTANT_TOKEN"
 
+[mcp_servers.openbrain]
+url = "https://openbrain.ckcompute.xyz/mcp"
+bearer_token_env_var = "OPENBRAIN_MCP_ACCESS_KEY"
+
 [plugins."google-drive@openai-curated"]
 enabled = true
 
