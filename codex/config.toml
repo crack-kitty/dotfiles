@@ -36,8 +36,8 @@ url = "https://n8n-mcp.ckcompute.xyz/mcp"
 bearer_token_env_var = "N8N_MCP_TOKEN"
 
 [mcp_servers.homeassistant]
-command = "bash"
-args = ["-lc", 'exec npx -y mcp-remote "$HOMEASSISTANT_MCP_URL" --allow-http']
+url = "http://192.168.22.50:8123/api/mcp"
+bearer_token_env_var = "HOMEASSISTANT_TOKEN"
 
 [mcp_servers.openbrain]
 url = "https://openbrain.ckcompute.xyz/mcp"
@@ -55,4 +55,4 @@ enabled = true
 [hooks.state]
 
 [hooks.state."/home/dave/.codex/hooks.json:stop:0:0"]
-trusted_hash = "sha256:fc3d3eea9ec76d453e10ca85d8472ba3037fc6094e507077d2056a88bdec2482"
+trusted_hash = "sha256:aae75c646a0aa7b0587ec96084a6b79f00aa176f1d12d94e65472955bc499a1e"
