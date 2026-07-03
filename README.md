@@ -25,8 +25,11 @@ Codex runtime paths.
 
 - `claude/CLAUDE.md`, `claude/agents/`, `claude/hooks/`, and `claude/skills/`
   are shared Claude Code rules and assets.
-- `codex/AGENTS.md`, `codex/*.config.toml`, and `codex/agents/` are shared
-  Codex rules and profiles.
+- `codex/AGENTS.md`, `codex/*.config.toml`, `codex/hooks.json`, and
+  `codex/agents/` are shared Codex rules, hooks, and profiles.
+- `scripts/dashboard-stop-hook.sh` is shared by Claude Code and Codex. It only
+  runs the local dashboard reporter when `~/appdev/dashboard` and `~/.local/bin/uv`
+  exist; other machines log a skip and exit cleanly.
 - `install.conf.yaml` is the Linux Dotbot config.
 - `install.windows.conf.yaml` and `scripts/install-windows-config.ps1` are the
   Windows install path.

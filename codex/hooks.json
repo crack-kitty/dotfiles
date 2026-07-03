@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DASHBOARD_HOOK_CWD=\"$PWD\" bash \"$HOME/.dotfiles/scripts/dashboard-stop-hook.sh\" codex \"$HOME/.codex/dashboard-hook.log\"",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}
