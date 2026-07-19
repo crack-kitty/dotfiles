@@ -30,14 +30,15 @@ status_line = [
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
+"gpt-5.6-sol" = 4
 
 [mcp_servers.n8n]
 url = "https://n8n-mcp.ckcompute.xyz/mcp"
 bearer_token_env_var = "N8N_MCP_TOKEN"
 
 [mcp_servers.homeassistant]
-command = "bash"
-args = ["-lc", 'exec npx -y mcp-remote "$HOMEASSISTANT_MCP_URL" --allow-http']
+url = "http://192.168.22.50:8123/api/mcp"
+bearer_token_env_var = "HOMEASSISTANT_TOKEN"
 
 [mcp_servers.openbrain]
 url = "https://openbrain.ckcompute.xyz/mcp"
