@@ -174,6 +174,22 @@ When encountering a bug or unexpected behavior:
 
 See `~/.claude/skills/*/SKILL.md` for details.
 
+### OpenSkills pilots
+
+OpenSkills source lives in the private repo submodule at `~/.dotfiles/openskills`.
+Treat it as a portable package layer for procedures that should work across
+Claude Code, Codex, and Hermes, not as a bulk skill library.
+
+Live Claude Code pilot skills are symlinked from the private submodule:
+
+- `~/.claude/skills/session-to-skill-extractor`
+- `~/.claude/skills/agentic-harness-designer`
+- `~/.claude/skills/browser-qa`
+
+Use these when the task matches their descriptions. Do not copy Nate/OpenSkills
+source into public docs. If a pilot overlaps an existing Dave-specific skill,
+merge with the existing skill rather than replacing it.
+
 **Research archive**: `~/.claude/research/` stores research findings, source documentation, and reference materials from `/research` sessions and manual investigations. Check here before starting new research to build on prior work.
 
 ---

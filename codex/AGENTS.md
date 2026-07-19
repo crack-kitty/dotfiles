@@ -17,6 +17,28 @@ summaries, simple checks, and mechanical edits to `cheap-worker` and wait for
 the result before integrating it. Plan first, implement second, review before
 committing.
 
+## OpenSkills integration
+
+OpenSkills source lives in the private repo submodule at
+`~/.dotfiles/openskills`. Treat it as the portable package layer for procedures
+that should work across Claude Code, Codex, and Hermes.
+
+Active pilot packages:
+
+- `~/.dotfiles/openskills/packages/session-to-skill-extractor`
+- `~/.dotfiles/openskills/packages/agentic-harness-designer`
+- `~/.dotfiles/openskills/packages/browser-qa`
+
+Codex does not get Claude-style implicit skill auto-routing from these packages.
+When a task matches a pilot package, explicitly read that package's `SKILL.md`
+and `adapters/codex/README.md`, then apply the model-routing rules above.
+Use `cheap-worker` only for bounded inventory, summaries, simple checks, and
+mechanical edits. Use `gpt-5.5` high/xhigh for architecture, subtle debugging,
+security, and cross-file decisions.
+
+Do not bulk-import Nate/OpenSkills source into live Codex context. Load only the
+specific package needed for the current task.
+
 ## OnRamp operations
 
 When working in or around `/apps/onramp`, treat OnRamp as a Makefile-managed

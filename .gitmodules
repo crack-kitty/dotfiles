@@ -5,3 +5,6 @@
 [submodule "claude/skills-vendor/n8n-skills"]
 	path = claude/skills-vendor/n8n-skills
 	url = https://github.com/czlonkowski/n8n-skills.git
+[submodule "openskills"]
+	path = openskills
+	url = https://github.com/crack-kitty/openskills.git

@@ -1,3 +1,15 @@
+## 2026-07-19: OpenSkills private pilot integration
+
+**Added:**
+- Private OpenSkills repo submodule at `~/.dotfiles/openskills`
+- Claude Code pilot skill symlinks for `session-to-skill-extractor`, `agentic-harness-designer`, and `browser-qa`
+- CLAUDE.md guidance to treat OpenSkills as a portable package layer across Claude Code, Codex, and Hermes
+- Codex AGENTS.md guidance to load only specific OpenSkills packages and keep model routing explicit
+
+**Why:** OpenSkills contains private Nate B. Jones source material, so the source lives in a private repo while public dotfiles carry only submodule metadata and symlink paths. Existing Dave-specific skills remain the default; pilots merge into existing skills rather than replacing them.
+
+**Files:** ~/.dotfiles/.gitmodules, ~/.dotfiles/openskills, ~/.dotfiles/claude/skills/session-to-skill-extractor, ~/.dotfiles/claude/skills/agentic-harness-designer, ~/.dotfiles/claude/skills/browser-qa, ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/codex/AGENTS.md, ~/.dotfiles/claude/CHANGELOG.md
+
 ## 2026-05-02: Added Session End — Mandatory section
 
 **Added:**
