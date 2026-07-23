@@ -1,0 +1,8 @@
+# Runtime state, not code. The runner recreates these directories on demand.
+specs/inbox/
+specs/running/
+specs/done/
+specs/failed/
+work/
+logs/
+pilot-repo/

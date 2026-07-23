@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# Process the oldest spec in the factory inbox end to end.
+#
+# Spec in, branch out. The spec's own verify command is the only quality gate,
+# so a spec whose verify cannot fail is rejected as invalid.
+set -euo pipefail
+
+FACTORY="$HOME/factory"
+INBOX="$FACTORY/specs/inbox"
+RUNNING="$FACTORY/specs/running"
+DONE="$FACTORY/specs/done"
+FAILED="$FACTORY/specs/failed"
+mkdir -p "$INBOX" "$RUNNING" "$DONE" "$FAILED" "$FACTORY/work" "$FACTORY/logs"
+
+# cron and other minimal environments drop ~/.local/bin, where claude lives.
+export PATH="$HOME/.local/bin:$PATH"
+
+spec_src=$(ls -1 "$INBOX"/*.md 2>/dev/null | head -1 || true)
+if [ -z "$spec_src" ]; then
+  echo "inbox empty"
+  exit 0
+fi
+
+specname=$(basename "$spec_src" .md)
+runid="$(date -u +%Y%m%d-%H%M%S)-${specname}"
+spec="$RUNNING/$(basename "$spec_src")"
+mv "$spec_src" "$spec"
+
+log="$FACTORY/logs/${runid}.log"
+: > "$log"
+
+fail() {
+  echo "FAILED: $1" | tee -a "$log"
+  mv "$spec" "$FAILED/${runid}.md"
+  printf '\nfailure: %s\nlog: %s\n' "$1" "$log" >> "$FAILED/${runid}.md"
+  exit 1
+}
+
+field() { sed -n "s/^$1: *//p" "$spec" | head -1; }
+repo=$(field repo)
+verify=$(field verify)
+auto_merge=$(field auto_merge)
+
+[ -n "$repo" ] || fail "spec has no repo field"
+[ -d "$repo/.git" ] || fail "repo is not a git repo: $repo"
+[ -n "$verify" ] || fail "spec has no verify command"
+command -v claude >/dev/null || fail "claude CLI not found on PATH"
+
+workdir="$FACTORY/work/$runid"
+git clone --quiet "$repo" "$workdir"
+cp "$spec" "$workdir/FACTORY-SPEC.md"
+
+# The gate must be able to fail, or it is not a gate.
+echo "== pre-gate check: $verify ==" >> "$log"
+if (cd "$workdir" && bash -c "$verify") >> "$log" 2>&1; then
+  fail "verify command already passes on a clean checkout; spec is invalid"
+fi
+
+prompt="You are a builder inside a dark-factory pipeline. Invoke the
+dark-factory skill and follow it exactly. The spec is FACTORY-SPEC.md in
+the current directory. Build until the spec's verify command passes, commit
+your work in small semantic commits, write BUILD-REPORT.md, and stop. Never
+touch files outside this working directory."
+
+echo "== build $runid ==" >> "$log"
+(cd "$workdir" && claude -p "$prompt" --permission-mode bypassPermissions) >> "$log" 2>&1 || true
+
+echo "== verify: $verify ==" >> "$log"
+if ! (cd "$workdir" && bash -c "$verify") >> "$log" 2>&1; then
+  fail "verify command failed"
+fi
+
+if [ -z "$(git -C "$workdir" log --oneline origin/HEAD..HEAD 2>/dev/null)" ]; then
+  fail "verify passes but the builder committed nothing"
+fi
+
+branch="factory/$runid"
+git -C "$workdir" push --quiet origin "HEAD:refs/heads/$branch"
+
+merged="no"
+if [ "$auto_merge" = "true" ]; then
+  if git -C "$repo" diff --quiet && git -C "$repo" diff --cached --quiet; then
+    if git -C "$repo" merge --ff-only --quiet "$branch" >> "$log" 2>&1; then
+      merged="yes"
+    fi
+  fi
+fi
+
+report="$DONE/${runid}-report.md"
+{
+  echo "# Factory report: $runid"
+  echo
+  echo "- spec: $(basename "$spec")"
+  echo "- repo: $repo"
+  echo "- branch: $branch"
+  echo "- auto_merge requested: ${auto_merge:-false}, merged: $merged"
+  echo "- log: $log"
+  echo
+  echo "## Builder report"
+  echo
+  cat "$workdir/BUILD-REPORT.md" 2>/dev/null || echo "(builder wrote no BUILD-REPORT.md)"
+  echo
+  echo "## Commits"
+  echo
+  echo '```'
+  git -C "$workdir" log --oneline origin/HEAD..HEAD 2>/dev/null || echo "(none)"
+  echo '```'
+  echo
+  echo "## Verify output (tail)"
+  echo
+  echo '```'
+  tail -20 "$log"
+  echo '```'
+} > "$report"
+
+mv "$spec" "$DONE/${runid}.md"
+echo "DONE: $report"

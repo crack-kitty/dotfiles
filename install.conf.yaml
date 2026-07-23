@@ -44,6 +44,7 @@
 
 - link:
     ~/.claude: claude
+    ~/factory: factory
     ~/.codex/config.toml: codex/config.toml
     ~/.codex/triage.config.toml: codex/triage.config.toml
     ~/.codex/deep-work.config.toml: codex/deep-work.config.toml
