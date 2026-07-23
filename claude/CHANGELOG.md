@@ -79,3 +79,13 @@
 **Why:** Corrections were captured in four places (history JSONL, tasks/lessons.md, auto-memory, OpenBrain) but nothing harvested them into durable rules, so the same correction recurred across sessions.
 
 **Files:** ~/.dotfiles/openskills/packages/feedback-flywheel/*, ~/.dotfiles/claude/skills/feedback-flywheel (symlink), ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-23: Schedule the monthly flywheel distill via local cron
+
+**Added:**
+- `scripts/monthly-distill.sh` in the feedback-flywheel package: first-Monday guard evaluated in America/New_York, idempotent per day, explicit PATH for cron, headless `claude -p` run
+- User crontab entry `0 9 1-7 * *` tagged `# flywheel-monthly-distill`
+
+**Why:** A claude.ai cloud routine cannot do this job. Three of the distill's four capture surfaces (~/.claude/history, auto-memory, the report path) are local-only, so a cloud run would silently harvest OpenBrain alone. Cron cannot express "first Monday" (it ORs day-of-month with day-of-week), hence the in-script guard. CRON_TZ was deliberately NOT set at crontab scope because that would have shifted the existing graphify and dashboard jobs by four hours.
+
+**Files:** ~/.dotfiles/openskills/packages/feedback-flywheel/scripts/monthly-distill.sh, ~/.dotfiles/openskills/packages/feedback-flywheel/SKILL.md, user crontab, ~/.dotfiles/claude/CHANGELOG.md
