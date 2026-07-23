@@ -185,6 +185,9 @@ Live Claude Code pilot skills are symlinked from the private submodule:
 - `~/.claude/skills/session-to-skill-extractor`
 - `~/.claude/skills/agentic-harness-designer`
 - `~/.claude/skills/browser-qa`
+- `~/.claude/skills/skill-fitness`
+- `~/.claude/skills/feedback-flywheel`
+- `~/.claude/skills/dark-factory`
 
 Use these when the task matches their descriptions. Do not copy Nate/OpenSkills
 source into public docs. If a pilot overlaps an existing Dave-specific skill,

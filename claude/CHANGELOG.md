@@ -101,3 +101,10 @@
 **Note:** ~/factory is machine-local, outside dotfiles. The skill syncs; the runner does not.
 
 **Files:** ~/.dotfiles/openskills/packages/dark-factory/*, ~/.dotfiles/claude/skills/dark-factory (symlink), ~/factory/*, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-23: Register new pilots in CLAUDE.md
+
+**Changed:**
+- OpenSkills pilots list now includes skill-fitness, feedback-flywheel, dark-factory
+
+**Files:** ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/claude/CHANGELOG.md
