@@ -59,3 +59,14 @@
 **Why:** gh was the actual missing piece on a fresh machine (git/node/python ship with Ubuntu, gh doesn't). Matches the gitleaks/jq prebuilt-binary user-prefix pattern, no sudo required.
 
 **Files:** ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-23: Add skill-fitness audit skill
+
+**Added:**
+- skill-fitness OpenSkills package: quarterly keep/merge/delete audit of the installed skill library, with deterministic inventory script
+
+**Why:** The library grew to 38 skills with a creation gate (session-to-skill-extractor) but no deletion side. Skills that never fire or restate harness defaults cost context on every session.
+
+**Note:** Helper scripts live in `scripts/`, not `bin/`. The damage-control hook blocks any Bash command containing `/bin/`, so a `bin/` directory would trip a false positive on every chmod and invocation.
+
+**Files:** ~/.dotfiles/openskills/packages/skill-fitness/*, ~/.dotfiles/claude/skills/skill-fitness (symlink), ~/.dotfiles/claude/CHANGELOG.md
