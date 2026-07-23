@@ -26,8 +26,11 @@ Spec in, branch out. Drop a spec file in `specs/inbox/`, run
 The damage-control hook blocks any Bash command containing `/bin/`, so a
 `bin/` directory here would trip a false positive on every invocation.
 
-## Not synced
+## Synced
 
-This tree lives outside `~/.dotfiles` and is machine-local. The builder
-protocol it depends on is the `dark-factory` skill, which does sync. If this
-machine is rebuilt, recreate `scripts/factory-run` or move it into dotfiles.
+This tree lives in `~/.dotfiles/factory` and `~/factory` is a symlink to it,
+wired up by dotbot via `install.conf.yaml`. A fresh machine gets the pipeline
+from `./install` with no manual steps.
+
+Runtime state (`specs/inbox`, `running`, `done`, `failed`, `work`, `logs`) is
+gitignored; the runner recreates those directories on demand.

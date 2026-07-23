@@ -98,7 +98,7 @@
 
 **Why:** Spec-in/branch-out autonomy where the verify command is the entire quality system. Safe defaults for solo use: the runner rejects a spec whose verify already passes (a gate that cannot fail is not a gate), rejects a build that commits nothing, and lands work on a `factory/<runid>` branch unless a spec opts into `auto_merge`.
 
-**Note:** ~/factory is machine-local, outside dotfiles. The skill syncs; the runner does not.
+**Note:** The pipeline is versioned at `~/.dotfiles/factory` with `~/factory` symlinked by dotbot, so `./install` sets it up on a fresh machine. Runtime state (inbox/running/done/failed/work/logs) is gitignored.
 
 **Files:** ~/.dotfiles/openskills/packages/dark-factory/*, ~/.dotfiles/claude/skills/dark-factory (symlink), ~/factory/*, ~/.dotfiles/claude/CHANGELOG.md
 
