@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1"
+  },
   "includeCoAuthoredBy": false,
   "hooks": {
     "Stop": [
@@ -42,7 +45,5 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "remoteControlAtStartup": false,
-  "env": {
-    "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1"
-  }
+  "model": "opus[1m]"
 }
