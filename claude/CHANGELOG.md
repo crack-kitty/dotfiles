@@ -70,3 +70,12 @@
 **Note:** Helper scripts live in `scripts/`, not `bin/`. The damage-control hook blocks any Bash command containing `/bin/`, so a `bin/` directory would trip a false positive on every chmod and invocation.
 
 **Files:** ~/.dotfiles/openskills/packages/skill-fitness/*, ~/.dotfiles/claude/skills/skill-fitness (symlink), ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-23: Add feedback-flywheel distill skill
+
+**Added:**
+- feedback-flywheel OpenSkills package: monthly distill of history/lessons/memory/OpenBrain into proposed CLAUDE.md rule diffs, 3+ occurrence threshold
+
+**Why:** Corrections were captured in four places (history JSONL, tasks/lessons.md, auto-memory, OpenBrain) but nothing harvested them into durable rules, so the same correction recurred across sessions.
+
+**Files:** ~/.dotfiles/openskills/packages/feedback-flywheel/*, ~/.dotfiles/claude/skills/feedback-flywheel (symlink), ~/.dotfiles/claude/CHANGELOG.md
