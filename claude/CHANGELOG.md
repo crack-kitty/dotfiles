@@ -89,3 +89,15 @@
 **Why:** A claude.ai cloud routine cannot do this job. Three of the distill's four capture surfaces (~/.claude/history, auto-memory, the report path) are local-only, so a cloud run would silently harvest OpenBrain alone. Cron cannot express "first Monday" (it ORs day-of-month with day-of-week), hence the in-script guard. CRON_TZ was deliberately NOT set at crontab scope because that would have shifted the existing graphify and dashboard jobs by four hours.
 
 **Files:** ~/.dotfiles/openskills/packages/feedback-flywheel/scripts/monthly-distill.sh, ~/.dotfiles/openskills/packages/feedback-flywheel/SKILL.md, user crontab, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-23: Add dark-factory builder skill and pipeline
+
+**Added:**
+- dark-factory OpenSkills package: builder protocol for headless spec-to-branch runs
+- ~/factory pipeline: spec inbox, factory-run runner, verify gate, report flow
+
+**Why:** Spec-in/branch-out autonomy where the verify command is the entire quality system. Safe defaults for solo use: the runner rejects a spec whose verify already passes (a gate that cannot fail is not a gate), rejects a build that commits nothing, and lands work on a `factory/<runid>` branch unless a spec opts into `auto_merge`.
+
+**Note:** ~/factory is machine-local, outside dotfiles. The skill syncs; the runner does not.
+
+**Files:** ~/.dotfiles/openskills/packages/dark-factory/*, ~/.dotfiles/claude/skills/dark-factory (symlink), ~/factory/*, ~/.dotfiles/claude/CHANGELOG.md
