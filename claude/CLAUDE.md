@@ -148,6 +148,36 @@ When encountering a bug or unexpected behavior:
 - Diff behavior between main and your changes when relevant
 - Ask yourself: "Would a staff engineer approve this?"
 
+**Verification is proportional to blast radius, and it runs BEFORE the claim.**
+
+Before saying a change is done, answer three things out loud:
+
+1. What did I just change, and what is the failure I would be *least* likely to notice?
+2. What is the cheapest available check that would catch exactly that?
+3. Run it, and report its actual output — not what I intended it to be.
+
+**These are never verification of the thing you changed:**
+
+- "The tool returned success" — that proves the write landed, not that the content is correct
+- "Validation passed" — validators check what they check, which is rarely what you just changed
+- "The execution was green" — a run that never reached your code proves nothing about your code
+- "It looked right when I wrote it" — you are the least reliable reviewer of your own edit
+
+**Cheapest checks, in order of preference:**
+
+1. Syntax-check the artifact directly: `node --check`, `python -m py_compile`, `jq .`, `yamllint`
+2. Read the value back from the live system and diff it against what you meant to write
+3. Query the target for the row/file/state you claim to have produced
+4. Run the thing once
+
+**Scale verification UP with change size, never down because the change felt routine.** If an
+edit touches more than one node, function, or file, verifying it is mandatory. The common
+failure is verifying the small easy change and skipping the large risky one, which is exactly
+backwards.
+
+**When you generated the code, you own checking it.** Writing it and validating it are two
+separate jobs; doing the first does not discharge the second.
+
 ---
 
 ## Auto-Activating Skills

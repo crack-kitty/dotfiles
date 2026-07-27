@@ -108,3 +108,19 @@
 - OpenSkills pilots list now includes skill-fitness, feedback-flywheel, dark-factory
 
 **Files:** ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-07-27: Verification Before Done — proportional to blast radius
+
+**Changed:**
+- Expanded the "Verification Before Done" section with a mechanical three-question gate that
+  runs before claiming a change is done: what could be wrong, what is the cheapest check that
+  catches it, run it and report the real output.
+- Listed the four non-verifications explicitly (tool returned success, validation passed,
+  execution was green, it looked right), a ranked list of cheap checks, and the rule that
+  verification scales UP with change size.
+- Prompted by a live outage: a three-node n8n Code edit was left unverified while a smaller
+  one-node edit in the same session was verified. The validator reported 0 errors on a node
+  that could not compile, and the failure only surfaced when the node was first reached at
+  runtime the next trading morning.
+
+**Files:** ~/.claude/CLAUDE.md, ~/.claude/CHANGELOG.md
