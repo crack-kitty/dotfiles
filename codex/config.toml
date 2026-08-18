@@ -1,8 +1,9 @@
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
 plan_mode_reasoning_effort = "high"
 
 [features]
+hooks = true
 multi_agent = true
 
 [projects."/home/dave/appdev/miletrack"]
@@ -18,6 +19,21 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/dave/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/home/dave/appdev/appointbook"]
+trust_level = "trusted"
+
+[projects."/home/dave/appdev/npos"]
+trust_level = "trusted"
+
+[projects."/home/dave/n8n/stockagent"]
+trust_level = "trusted"
+
+[projects."/home/dave/appdev/karaoke-channel"]
+trust_level = "trusted"
+
+[projects."/home/dave/appdev/slowdollar"]
 trust_level = "trusted"
 
 [tui]
@@ -57,3 +73,6 @@ enabled = true
 
 [hooks.state."/home/dave/.codex/hooks.json:stop:0:0"]
 trusted_hash = "sha256:aae75c646a0aa7b0587ec96084a6b79f00aa176f1d12d94e65472955bc499a1e"
+
+[hooks.state."/home/dave/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:92a3bc98b14d3e4509b9cfd84e3d037e9d1fe765ca0e11e46a8fbc1c104f0e95"
