@@ -31,9 +31,11 @@ Codex runtime paths.
   respective runtime directories; Dotbot links the Codex hook into `~/.codex`.
 - `scripts/dashboard-stop-hook.sh` is shared by Claude Code and Codex. It only
   runs the local dashboard reporter when `~/appdev/dashboard` and `~/.local/bin/uv`
-  exist; other machines log a skip and exit cleanly. The reporter gives its
-  model call five seconds, with a seven-second wrapper backstop that kills the
-  process group, logs a timeout skip, and exits successfully.
+  exist; other machines log a skip and exit cleanly. The reporter writes a
+  source-marked OpenBrain receipt without invoking a model, under a seven-second
+  wrapper backstop. After a successful receipt attempt, the hook detaches a
+  serialized `dashboard reconcile-sessions` pass so Codex can enrich the same
+  fact without delaying either agent's stop hook.
 - `install.conf.yaml` is the Linux Dotbot config.
 - `install.windows.conf.yaml` and `scripts/install-windows-config.ps1` are the
   Windows install path.

@@ -7,6 +7,7 @@ repo="${DASHBOARD_HOOK_REPO:-$HOME/appdev/dashboard}"
 uv_bin="${DASHBOARD_HOOK_UV:-$HOME/.local/bin/uv}"
 hook_cwd="${DASHBOARD_HOOK_CWD:-$PWD}"
 hook_timeout="${DASHBOARD_HOOK_TIMEOUT_SECONDS:-7}"
+host_openbrain_dsn="${DASHBOARD_HOOK_OPENBRAIN_DATABASE_URL:-}"
 
 case "$source_name" in
   codex|claude-code) ;;
@@ -33,7 +34,7 @@ timeout_bin="$(command -v timeout 2>/dev/null || true)"
 cd "$repo" || skip "cd_failed"
 
 {
-  DASHBOARD_HOOK_CWD="$hook_cwd" "$timeout_bin" \
+  DASHBOARD_HOOK_CWD="$hook_cwd" OPENBRAIN_DATABASE_URL="$host_openbrain_dsn" "$timeout_bin" \
     --signal=TERM \
     --kill-after=1s \
     "${hook_timeout}s" \
@@ -42,7 +43,18 @@ cd "$repo" || skip "cd_failed"
 } 2>> "$log_path"
 
 case "$status" in
-  0) ;;
+  0)
+    reconcile_log="${log_path}.reconcile"
+    setsid_bin="$(command -v setsid 2>/dev/null || true)"
+    if [[ -n "$setsid_bin" ]]; then
+      OPENBRAIN_DATABASE_URL="$host_openbrain_dsn" "$setsid_bin" --fork \
+        "$uv_bin" run python -m dashboard.cli reconcile-sessions --json \
+        </dev/null >> "$reconcile_log" 2>&1 || true
+    else
+      printf '{"ok":true,"result":"skipped_background_reconciliation","reason":"missing_setsid"}\n' \
+        >> "$reconcile_log" 2>/dev/null || true
+    fi
+    ;;
   124|137)
     printf '{"ok":true,"result":"skipped_dashboard_timeout","timeout_seconds":"%s","saved_to":[],"openbrain_saved":false}\n' "$hook_timeout" >> "$log_path" 2>/dev/null || true
     ;;

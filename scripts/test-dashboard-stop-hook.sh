@@ -33,14 +33,24 @@ fast_uv="$tmpdir/fast-uv"
 cat > "$fast_uv" <<'EOF'
 #!/usr/bin/env bash
 printf '{"ok":true,"result":"fast_test"}\n'
+if [[ "$*" == *"reconcile-sessions"* ]]; then
+  printf 'started\n' > "$DASHBOARD_RECONCILE_MARKER"
+fi
 EOF
 chmod +x "$fast_uv"
 fast_log="$tmpdir/fast.log"
+reconcile_marker="$tmpdir/reconcile.started"
 DASHBOARD_HOOK_REPO="$repo" \
 DASHBOARD_HOOK_UV="$fast_uv" \
 DASHBOARD_HOOK_TIMEOUT_SECONDS="1" \
+DASHBOARD_RECONCILE_MARKER="$reconcile_marker" \
 bash "$hook" codex "$fast_log" < /dev/null
 grep -q '"result":"fast_test"' "$fast_log"
+for _ in $(seq 1 20); do
+  [[ -s "$reconcile_marker" ]] && break
+  sleep 0.05
+done
+grep -q 'started' "$reconcile_marker"
 
 hanging_uv="$tmpdir/hanging-uv"
 cat > "$hanging_uv" <<'EOF'
