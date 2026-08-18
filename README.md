@@ -29,7 +29,9 @@ Codex runtime paths.
   `codex/agents/` are shared Codex rules, hooks, and profiles.
 - `scripts/dashboard-stop-hook.sh` is shared by Claude Code and Codex. It only
   runs the local dashboard reporter when `~/appdev/dashboard` and `~/.local/bin/uv`
-  exist; other machines log a skip and exit cleanly.
+  exist; other machines log a skip and exit cleanly. The reporter gives its
+  model call five seconds, with a seven-second wrapper backstop that kills the
+  process group, logs a timeout skip, and exits successfully.
 - `install.conf.yaml` is the Linux Dotbot config.
 - `install.windows.conf.yaml` and `scripts/install-windows-config.ps1` are the
   Windows install path.

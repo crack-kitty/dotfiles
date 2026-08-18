@@ -28,3 +28,43 @@ if bash "$hook" bad-source "$bad_source_log" < /dev/null; then
   exit 1
 fi
 grep -q '"result":"invalid_source"' "$bad_source_log"
+
+fast_uv="$tmpdir/fast-uv"
+cat > "$fast_uv" <<'EOF'
+#!/usr/bin/env bash
+printf '{"ok":true,"result":"fast_test"}\n'
+EOF
+chmod +x "$fast_uv"
+fast_log="$tmpdir/fast.log"
+DASHBOARD_HOOK_REPO="$repo" \
+DASHBOARD_HOOK_UV="$fast_uv" \
+DASHBOARD_HOOK_TIMEOUT_SECONDS="1" \
+bash "$hook" codex "$fast_log" < /dev/null
+grep -q '"result":"fast_test"' "$fast_log"
+
+hanging_uv="$tmpdir/hanging-uv"
+cat > "$hanging_uv" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$$" > "$DASHBOARD_HANG_PID_FILE"
+trap '' TERM
+while true; do
+  sleep 10
+done
+EOF
+chmod +x "$hanging_uv"
+timeout_log="$tmpdir/timeout.log"
+timeout_output="$tmpdir/timeout-output.log"
+hang_pid_file="$tmpdir/hang.pid"
+DASHBOARD_HOOK_REPO="$repo" \
+DASHBOARD_HOOK_UV="$hanging_uv" \
+DASHBOARD_HOOK_TIMEOUT_SECONDS="1" \
+DASHBOARD_HANG_PID_FILE="$hang_pid_file" \
+bash "$hook" codex "$timeout_log" < /dev/null > "$timeout_output" 2>&1
+grep -q '"result":"skipped_dashboard_timeout"' "$timeout_log"
+grep -q '"timeout_seconds":"1"' "$timeout_log"
+test ! -s "$timeout_output"
+hang_pid="$(cat "$hang_pid_file")"
+if kill -0 "$hang_pid" 2>/dev/null; then
+  echo "timed-out hook process survived: $hang_pid" >&2
+  exit 1
+fi
