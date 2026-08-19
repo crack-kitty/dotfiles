@@ -124,3 +124,20 @@
   runtime the next trading morning.
 
 **Files:** ~/.claude/CLAUDE.md, ~/.claude/CHANGELOG.md
+
+## 2026-08-18: Layer and thin global agent instructions
+
+**Changed:**
+- Added one canonical cross-client policy in `~/.dotfiles/agent-instructions/shared.md`
+- Reduced the user-level `CLAUDE.md` to a stable user-level shared-policy import plus a thin Claude Code adapter
+- Added generated `claude/shared-agent-policy.md` so the import works regardless of the dotfiles clone location
+- Split Codex-only routing into `agent-instructions/codex.md` and made `codex/AGENTS.md` deterministic committed output
+- Added `scripts/render-agent-instructions.py` with write, working-tree `--check`, and staged `--check-index` modes
+- Added index-aware generated-output verification to the repository’s versioned pre-commit hook
+- Updated the Windows installer to copy the shared-policy bridge into `~/.claude`
+- Preserved explicit user authorization before commits, pushes, merges, tags, deployments, publication, or pull requests
+- Documented Linux live-symlink and Windows installer behavior
+
+**Why:** The former global files mixed durable policy, client routing, project procedures, tool mechanics, and writing catalogs. The layered design keeps one shared source, preserves client-specific behavior, substantially reduces always-loaded Claude context, and remains reproducible from the dotfiles repository.
+
+**Files:** ~/.dotfiles/agent-instructions/*, ~/.dotfiles/codex/AGENTS.md, ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/claude/shared-agent-policy.md, ~/.dotfiles/scripts/render-agent-instructions.py, ~/.dotfiles/scripts/install-windows-config.ps1, ~/.dotfiles/githooks/pre-commit, ~/.dotfiles/README.md, ~/.dotfiles/execplan/2026-08-18-thin-global-agent-instructions.md, ~/.dotfiles/claude/CHANGELOG.md

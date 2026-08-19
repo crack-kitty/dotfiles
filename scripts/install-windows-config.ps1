@@ -186,6 +186,7 @@ Copy-RepoFile -Source (Join-Path $RepoRoot ".gitconfig") -Destination (Join-Path
 Copy-RepoFile -Source (Join-Path $RepoRoot ".gitignore") -Destination (Join-Path $homeDir ".gitignore")
 
 Copy-RepoFile -Source (Join-Path $RepoRoot "claude\CLAUDE.md") -Destination (Join-Path $claudeDir "CLAUDE.md")
+Copy-RepoFile -Source (Join-Path $RepoRoot "claude\shared-agent-policy.md") -Destination (Join-Path $claudeDir "shared-agent-policy.md")
 Copy-RepoFile -Source (Join-Path $RepoRoot "claude\CHANGELOG.md") -Destination (Join-Path $claudeDir "CHANGELOG.md")
 Copy-RepoFile -Source (Join-Path $RepoRoot "claude\statusline.sh") -Destination (Join-Path $claudeDir "statusline.sh")
 Copy-RepoFile -Source (Join-Path $RepoRoot "claude\statusline-command.sh") -Destination (Join-Path $claudeDir "statusline-command.sh")

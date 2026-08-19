@@ -11,4 +11,17 @@ else
 fi
 
 repo_root="$(git rev-parse --show-toplevel)"
+renderer="$repo_root/scripts/render-agent-instructions.py"
+if [ -f "$renderer" ]; then
+    if command -v python3 >/dev/null 2>&1; then
+        PYTHON="$(command -v python3)"
+    elif command -v python >/dev/null 2>&1; then
+        PYTHON="$(command -v python)"
+    else
+        echo "Python is required to verify generated agent instructions." >&2
+        exit 1
+    fi
+    "$PYTHON" "$renderer" --check-index
+fi
+
 "$GITLEAKS" protect --staged --redact --no-banner --source "$repo_root"
