@@ -141,3 +141,14 @@
 **Why:** The former global files mixed durable policy, client routing, project procedures, tool mechanics, and writing catalogs. The layered design keeps one shared source, preserves client-specific behavior, substantially reduces always-loaded Claude context, and remains reproducible from the dotfiles repository.
 
 **Files:** ~/.dotfiles/agent-instructions/*, ~/.dotfiles/codex/AGENTS.md, ~/.dotfiles/claude/CLAUDE.md, ~/.dotfiles/claude/shared-agent-policy.md, ~/.dotfiles/scripts/render-agent-instructions.py, ~/.dotfiles/scripts/install-windows-config.ps1, ~/.dotfiles/githooks/pre-commit, ~/.dotfiles/README.md, ~/.dotfiles/execplan/2026-08-18-thin-global-agent-instructions.md, ~/.dotfiles/claude/CHANGELOG.md
+
+## 2026-08-19: Root dashboard Stop hooks at home
+
+**Changed:**
+- Updated the Claude Code and Codex Stop hook wiring so dashboard hooks run with `DASHBOARD_HOOK_CWD="$HOME"`
+- Preserved the original shell cwd separately as `DASHBOARD_TRANSCRIPT_CWD` for exact transcript discovery
+- Project attribution now comes from observed tool workdirs or the session's last durable candidate before the launch cwd is considered
+
+**Why:** The prior Stop commands conflated transcript discovery with project attribution. A stale launch cwd could label cross-repository work as the wrong project even when the transcript contained the actual tool workdir.
+
+**Files:** ~/.dotfiles/codex/hooks.json, ~/.dotfiles/claude/settings.json, ~/.dotfiles/claude/CHANGELOG.md, ~/appdev/dashboard/src/dashboard/report.py

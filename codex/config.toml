@@ -72,7 +72,7 @@ enabled = true
 [hooks.state]
 
 [hooks.state."/home/dave/.codex/hooks.json:stop:0:0"]
-trusted_hash = "sha256:aae75c646a0aa7b0587ec96084a6b79f00aa176f1d12d94e65472955bc499a1e"
+trusted_hash = "sha256:ec08cd7b3beb18b7d0e3cc1e466ab3bb975853d6ed2bec6c59495c225b6f1fd6"
 
 [hooks.state."/home/dave/.codex/hooks.json:session_start:0:0"]
 trusted_hash = "sha256:92a3bc98b14d3e4509b9cfd84e3d037e9d1fe765ca0e11e46a8fbc1c104f0e95"

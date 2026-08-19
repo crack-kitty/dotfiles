@@ -15,7 +15,7 @@
       {
         "hooks": [
           {
-            "command": "DASHBOARD_HOOK_CWD=\"$PWD\" bash \"$HOME/.dotfiles/scripts/dashboard-stop-hook.sh\" codex \"$HOME/.codex/dashboard-hook.log\"",
+            "command": "DASHBOARD_TRANSCRIPT_CWD=\"$PWD\" DASHBOARD_HOOK_CWD=\"$HOME\" bash \"$HOME/.dotfiles/scripts/dashboard-stop-hook.sh\" codex \"$HOME/.codex/dashboard-hook.log\"",
             "timeout": 180,
             "type": "command"
           }

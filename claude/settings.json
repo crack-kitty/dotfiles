@@ -13,7 +13,7 @@
           },
           {
             "type": "command",
-            "command": "DASHBOARD_HOOK_CWD=\"$PWD\" bash \"$HOME/.dotfiles/scripts/dashboard-stop-hook.sh\" claude-code \"$HOME/.claude/logs/dashboard-hook.log\""
+            "command": "DASHBOARD_TRANSCRIPT_CWD=\"$PWD\" DASHBOARD_HOOK_CWD=\"$HOME\" bash \"$HOME/.dotfiles/scripts/dashboard-stop-hook.sh\" claude-code \"$HOME/.claude/logs/dashboard-hook.log\""
           }
         ]
       }

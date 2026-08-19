@@ -6,6 +6,9 @@ hook="$repo_root/scripts/dashboard-stop-hook.sh"
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
+grep -Fq 'DASHBOARD_TRANSCRIPT_CWD=\"$PWD\" DASHBOARD_HOOK_CWD=\"$HOME\"' "$repo_root/codex/hooks.json"
+grep -Fq 'DASHBOARD_TRANSCRIPT_CWD=\"$PWD\" DASHBOARD_HOOK_CWD=\"$HOME\"' "$repo_root/claude/settings.json"
+
 missing_repo_log="$tmpdir/missing-repo.log"
 DASHBOARD_HOOK_REPO="$tmpdir/no-such-dashboard" \
 DASHBOARD_HOOK_UV="$tmpdir/uv" \
