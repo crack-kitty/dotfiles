@@ -152,3 +152,18 @@
 **Why:** The prior Stop commands conflated transcript discovery with project attribution. A stale launch cwd could label cross-repository work as the wrong project even when the transcript contained the actual tool workdir.
 
 **Files:** ~/.dotfiles/codex/hooks.json, ~/.dotfiles/claude/settings.json, ~/.dotfiles/claude/CHANGELOG.md, ~/appdev/dashboard/src/dashboard/report.py
+
+## 2026-09-18: Herdr config and agent integrations under dotfiles
+
+**Changed:**
+- Moved `~/.config/herdr/config.toml` into `herdr/config.toml` and symlinked it back through dotbot
+- Expanded the config from two lines to a full setup: catppuccin theme, sidebar sizing and row gaps, branch/git-status rows for spaces, in-app toasts on background agent state changes, and `resume_agents_on_restore`
+- Added a prefix-free F-key layer (F2 workspace picker, F3/F4 workspace, F5/F6 agent, F7/F8 tab, F9 new tab, F10 sidebar, F12 navigate) alongside the unchanged `ctrl+b` prefix; bound `last_pane`, `switch_workspace`, and `focus_agent`, which Herdr ships empty
+- Added two popup commands: scratch shell on `prefix+alt+t`, git status/log on `prefix+alt+s`
+- Linked `~/.agents/skills/herdr` into `~/.codex/skills/` so Codex can use the Herdr skill for agent delegation, matching the existing `claude/skills/herdr` link
+- Added install steps that fetch Herdr if missing, install the `claude` and `codex` integrations separately (`herdr integration install` takes one harness per invocation), and regenerate the skill from the installed binary
+- Restored the Herdr `SessionStart` hook in `claude/settings.json`
+
+**Why:** The Herdr config was unmanaged and would not survive a rebuild, and the skill was only visible to Claude Code, so Codex could not delegate. F-keys rather than `ctrl+<letter>` because Herdr intercepts direct bindings before the pane sees them and the shell and agent TUIs already claim nearly every control chord. The `SessionStart` hook had been absent from the committed settings, so the settings guard reverted it on every install; without it Claude panes do not resume their native conversations after a server restart.
+
+**Files:** ~/.dotfiles/herdr/config.toml, ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/settings.json, ~/.dotfiles/claude/CHANGELOG.md
