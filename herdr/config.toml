@@ -1,0 +1,104 @@
+# herdr config — see `herdr --default-config` for every option and its default.
+# Reload after editing:  herdr server reload-config   (or prefix+shift+R)
+
+[theme]
+# Swap in one word: catppuccin, terminal, tokyo-night, dracula, nord,
+# gruvbox, one-dark, solarized, kanagawa, rose-pine, vesper
+name = "catppuccin"
+
+[ui]
+accent = "cyan"
+
+# Sidebar
+sidebar_width = 28
+sidebar_max_width = 40
+sidebar_collapsed_mode = "compact"
+
+# Agent panel grouped by space rather than by attention queue.
+agent_panel_sort = "spaces"
+
+# Panes
+pane_gaps = true
+show_agent_labels_on_pane_borders = true
+
+# Every workspace is single-tab today; reclaim the tab row until that changes.
+hide_tab_bar_when_single_tab = true
+
+# Don't stop to ask for a tab name.
+prompt_new_tab_name = false
+
+# Closing a workspace still asks.
+confirm_close = true
+
+[ui.sidebar.agents]
+row_gap = 1
+
+[ui.sidebar.spaces]
+row_gap = 1
+rows = [["state_icon", "workspace"], ["branch", "git_status"]]
+
+[ui.toast]
+# In-app toast when a background agent finishes or needs attention.
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.sound]
+enabled = true
+
+[session]
+resume_agents_on_restore = true
+
+[keys]
+# Prefix stays ctrl+b — every default prefix binding still works.
+prefix = "ctrl+b"
+
+# --- Direct (prefix-free) function-key layer ---------------------------------
+# F-keys are used because ctrl+<letter> chords are almost all claimed by the
+# shell or by the agent TUIs running inside panes, and herdr would swallow them
+# before the pane ever saw them. F1 and F11 are left alone (host terminal).
+# If one of these does nothing, the outer terminal is eating it — pick another.
+
+workspace_picker  = "f2"   # jump-to-anything; press / to search
+goto              = "f12"  # navigate mode
+
+previous_workspace = "f3"
+next_workspace     = "f4"
+
+previous_agent = "f5"
+next_agent     = "f6"      # cycle to the agent that just finished
+
+previous_tab = "f7"
+next_tab     = "f8"
+new_tab      = "f9"
+
+toggle_sidebar = "f10"
+
+# --- Prefix bindings filled in where herdr ships them unbound -----------------
+last_pane        = "prefix+tab"
+switch_workspace = "prefix+shift+1..9"
+focus_agent      = "prefix+alt+1..9"
+
+# --- Custom commands ----------------------------------------------------------
+# Scratch shell popup: runs over the current layout, closes when you exit.
+[[keys.command]]
+key = "prefix+alt+t"
+type = "popup"
+command = "$SHELL"
+width = "80%"
+height = "80%"
+
+# Git overview popup for the focused pane's directory.
+[[keys.command]]
+key = "prefix+alt+s"
+type = "popup"
+command = "sh -c 'git -c color.ui=always status; echo; git -c color.ui=always log --oneline -20; echo; printf \"[enter to close] \"; read _'"
+width = "80%"
+height = "80%"
+
+# Uncomment once lazygit is installed:
+# [[keys.command]]
+# key = "prefix+alt+g"
+# type = "popup"
+# command = "lazygit"
+# width = "90%"
+# height = "90%"

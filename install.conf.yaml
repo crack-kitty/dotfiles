@@ -14,6 +14,9 @@
 - create:
     - ~/.codex
     - ~/.codex/agents
+    - ~/.codex/skills
+    - ~/.agents/skills
+    - ~/.config/herdr
 
 # Vendor skills (submodules) — init before symlinks resolve
 - shell:
@@ -53,6 +56,7 @@
     ~/.codex/hooks.json: codex/hooks.json
     ~/.codex/herdr-agent-state.sh: codex/herdr-agent-state.sh
     ~/.codex/agents/cheap-worker.toml: codex/agents/cheap-worker.toml
+    ~/.config/herdr/config.toml: herdr/config.toml
 
 # Codex CLI for the codex@openai-codex Claude Code plugin
 - shell:
@@ -60,6 +64,25 @@
       description: Install Codex CLI (user-prefix npm) if missing
       stdout: true
       stderr: true
+
+# Herdr terminal workspace manager + agent integrations
+- shell:
+    - command: command -v herdr >/dev/null 2>&1 || curl -fsSL https://herdr.dev/install.sh | sh
+      description: Install Herdr to ~/.local/bin if missing
+      stdout: true
+      stderr: true
+    - command: command -v herdr >/dev/null 2>&1 && herdr integration install claude || true
+      description: Install Herdr agent-state hooks for Claude Code
+      stdout: true
+      stderr: true
+    - command: command -v herdr >/dev/null 2>&1 && herdr integration install codex || true
+      description: Install Herdr agent-state hooks for Codex
+      stdout: true
+      stderr: true
+    - command: command -v herdr >/dev/null 2>&1 && mkdir -p ~/.agents/skills/herdr && herdr --skill > ~/.agents/skills/herdr/SKILL.md || true
+      description: Regenerate the Herdr agent skill from the installed binary
+    - command: ln -sfn ~/.agents/skills/herdr ~/.codex/skills/herdr
+      description: Expose the Herdr skill to Codex (Claude Code gets it via claude/skills/herdr)
 
 # Sync Claude Code plugins from settings.json (idempotent)
 - shell:
