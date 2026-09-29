@@ -9,6 +9,11 @@ for env_file in "$HOME/.config/codex/env" "$HOME/.dotfiles/.local.env" "$HOME/.s
     fi
 done
 
+# Apply the configured display timezone to Codex and its children only.
+if [ -n "${CODEX_TIMEZONE:-}" ]; then
+    export TZ="$CODEX_TIMEZONE"
+fi
+
 real_codex="${CODEX_REAL:-$HOME/.local/bin/codex}"
 if [ ! -x "$real_codex" ]; then
     real_codex="$(PATH="${PATH//$HOME\/.local\/bin:/}" command -v codex)"

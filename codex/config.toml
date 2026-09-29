@@ -1,5 +1,5 @@
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 
 [features]
@@ -36,17 +36,39 @@ trust_level = "trusted"
 [projects."/home/dave/appdev/slowdollar"]
 trust_level = "trusted"
 
+[projects."/home/dave/projects/blender/test01"]
+trust_level = "trusted"
+
+[projects."/home/dave/bench/runs/codex_luna_low/n8n_03_repair_workflow"]
+trust_level = "trusted"
+
+[projects."/home/dave/bench/runs/codex_luna_low/n8n_01_create_workflow"]
+trust_level = "trusted"
+
+[projects."/home/dave/bench/runs/codex_luna_low/ha_02_edit_automation"]
+trust_level = "trusted"
+
+[projects."/home/dave/bench/runs/codex_luna_low/ha_03_lovelace"]
+trust_level = "trusted"
+
+[projects."/home/dave/bench/runs/codex_luna_low/n8n_02_edit_workflow"]
+trust_level = "trusted"
+
 [tui]
+animations = false
 status_line = [
   "model-with-reasoning",
   "current-dir",
   "git-branch",
   "context-used",
 ]
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 4
+gpt-6-astra = 4
+"gpt-6.1-sol" = 1
 
 [mcp_servers.n8n]
 url = "https://n8n-mcp.ckcompute.xyz/mcp"
