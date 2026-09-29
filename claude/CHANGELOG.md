@@ -1,3 +1,12 @@
+## 2026-09-29: Home-directory CLAUDE.md
+
+**Added:**
+- `home/CLAUDE.md`, linked to `~/CLAUDE.md` by install.conf.yaml
+
+**Why:** Claude Code 2.1.285's built-in agents-md fallback loads `~/AGENTS.md` (the Codex instructions) when a session starts in `~` with no project CLAUDE.md. A home CLAUDE.md stops that fallback.
+
+**Files:** ~/.dotfiles/home/CLAUDE.md, ~/.dotfiles/install.conf.yaml, ~/.dotfiles/claude/CHANGELOG.md
+
 ## 2026-07-19: OpenSkills private pilot integration
 
 **Added:**

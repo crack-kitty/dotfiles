@@ -47,6 +47,7 @@
 
 - link:
     ~/.claude: claude
+    ~/CLAUDE.md: home/CLAUDE.md
     ~/factory: factory
     ~/.codex/config.toml: codex/config.toml
     ~/.codex/triage.config.toml: codex/triage.config.toml
